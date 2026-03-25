@@ -3,172 +3,153 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-<meta name="theme-color" content="#050510"/>
-<title>Neurox — Elite Training</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Orbitron:wght@400;900&display=swap" rel="stylesheet"/>
+<meta name="theme-color" content="#0f172a"/>
+<title>Neurox — Elite V2</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;800&family=Orbitron:wght@400;900&display=swap" rel="stylesheet"/>
 <style>
 :root {
-  --bg:#050510; --s1:#0d0d20; --s2:#141428; --accent:#7c3aed; --cyan:#06b6d4;
-  --text:#e8e8ff; --muted:#5a5a88; --border:rgba(255,255,255,0.1);
+  --bg: #0f172a; --panel: #1e293b; --accent: #6366f1; --cyan: #22d3ee;
+  --text: #f8fafc; --muted: #94a3b8; --border: #334155; --success: #22c55e;
 }
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-body { font-family:'Space Grotesk', sans-serif; background:var(--bg); color:var(--text); overflow:hidden; }
+body { font-family:'Outfit', sans-serif; background:var(--bg); color:var(--text); overflow:hidden; }
 
-/* UI ELEMENTS */
-#app { max-width:500px; margin:0 auto; min-height:100vh; display:flex; flex-direction:column; position:relative; }
-header { padding:15px 20px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); background:rgba(13,13,32,0.8); backdrop-filter:blur(10px); z-index:100; }
-.logo { font-family:'Orbitron', sans-serif; font-weight:900; background:linear-gradient(to right, #7c3aed, #06b6d4); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+#app { max-width:500px; margin:0 auto; min-height:100vh; display:flex; flex-direction:column; position:relative; border-left:1px solid var(--border); border-right:1px solid var(--border); }
 
+/* HEADER MEJORADO */
+header { padding:15px 20px; display:flex; justify-content:space-between; align-items:center; background:rgba(15,23,42,0.9); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); z-index:100; }
+.logo-box { display:flex; flex-direction:column; }
+.logo { font-family:'Orbitron', sans-serif; font-weight:900; color:var(--cyan); letter-spacing:1px; font-size:1.2rem; }
+.xp-track { width:80px; height:4px; background:var(--panel); border-radius:2px; margin-top:4px; overflow:hidden; }
+#xp-fill { height:100%; background:var(--cyan); width:0%; transition:0.4s; }
+
+/* PANTALLAS */
 .screen { display:none; padding:20px; flex-direction:column; gap:20px; height:calc(100vh - 70px); overflow-y:auto; }
-.screen.active { display:flex; animation: fadeIn 0.3s ease; }
-@keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+.screen.active { display:flex; animation:fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 
-/* XP BAR */
-.xp-bar { width:100%; height:6px; background:var(--s2); border-radius:10px; margin-top:5px; overflow:hidden; }
-#xp-fill { height:100%; background:linear-gradient(90deg, var(--accent), var(--cyan)); width:0%; transition: width 0.5s; }
+/* TARJETAS DE SELECCIÓN (ALTA VISIBILIDAD) */
+.grid-menu { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+.card-mode { background:var(--panel); border:2px solid var(--border); padding:20px; border-radius:18px; text-align:center; transition:0.2s; cursor:pointer; }
+.card-mode:active { transform:scale(0.96); border-color:var(--accent); background:var(--bg); }
+.card-icon { font-size:2.2rem; margin-bottom:10px; display:block; }
+.card-title { font-weight:800; font-size:0.85rem; letter-spacing:1px; color:var(--text); text-transform:uppercase; }
 
-/* MODO CARDS */
-.grid { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
-.card { background:var(--s1); border:1px solid var(--border); padding:20px; border-radius:20px; text-align:center; transition:0.2s; cursor:pointer; }
-.card:active { transform:scale(0.95); border-color:var(--accent); }
-.card-icon { font-size:2rem; margin-bottom:10px; display:block; }
-.card-title { font-weight:700; font-size:0.9rem; letter-spacing:1px; }
+/* BOTÓN DE SALIDA */
+.btn-exit { background:var(--panel); border:1px solid var(--border); color:var(--muted); padding:8px 12px; border-radius:10px; font-size:0.7rem; font-weight:800; cursor:pointer; }
 
-/* OVERLAYS (EXPLICACIÓN Y RESULTADOS) */
-.overlay { position:fixed; inset:0; background:rgba(5,5,16,0.95); z-index:200; display:none; padding:30px; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
+/* INTERFAZ DE JUEGO (CONTRASTE MEJORADO) */
+#arena { flex-grow:1; display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; }
+.math-display { font-size:3.5rem; font-weight:800; color:var(--text); margin-bottom:40px; text-shadow:0 0 20px rgba(34,211,238,0.2); }
+.answer-grid { display:grid; grid-template-columns: 1fr 1fr; gap:15px; width:100%; }
+.btn-ans { background:#f8fafc; color:#0f172a; border:none; padding:20px; border-radius:16px; font-size:1.5rem; font-weight:800; cursor:pointer; box-shadow:0 4px 0 #cbd5e1; }
+.btn-ans:active { transform:translateY(2px); box-shadow:none; }
+
+/* ENFOQUE GRID */
+.focus-grid { display:grid; grid-template-columns: repeat(5, 1fr); gap:8px; width:100%; }
+.focus-cell { background:var(--panel); border:1px solid var(--border); aspect-ratio:1; display:flex; align-items:center; justify-content:center; font-size:1.2rem; font-weight:800; border-radius:8px; color:var(--muted); }
+
+/* OVERLAYS */
+.overlay { position:fixed; inset:0; background:var(--bg); z-index:200; display:none; padding:30px; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
 .overlay.active { display:flex; }
-.instr-icon { font-size:4rem; margin-bottom:20px; }
-.btn-play { background:var(--accent); color:white; border:none; padding:15px 40px; border-radius:15px; font-family:'Orbitron'; font-weight:900; margin-top:30px; width:100%; box-shadow:0 0 20px rgba(124,58,237,0.4); }
-
-/* JUEGO */
-#arena { flex-grow:1; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-.hud-small { display:flex; justify-content:space-between; width:100%; font-family:'Orbitron'; font-size:0.7rem; color:var(--muted); }
-.math-box { font-size:3rem; font-weight:900; color:var(--cyan); margin-bottom:30px; }
-
-/* PARTICULAS */
-.pt { position:fixed; pointer-events:none; z-index:999; animation: fly 0.6s ease-out forwards; }
-@keyframes fly { to { transform: translate(var(--x), var(--y)); opacity:0; } }
+.btn-start { background:var(--accent); color:white; border:none; padding:18px 40px; border-radius:15px; font-family:'Orbitron'; font-weight:900; width:100%; font-size:1rem; margin-top:20px; }
 </style>
 </head>
 <body>
 
 <div id="app">
   <header>
-    <div>
-      <div class="logo">NEUROX</div>
-      <div class="xp-bar"><div id="xp-fill"></div></div>
+    <div class="logo-box">
+      <span class="logo">NEUROX</span>
+      <div class="xp-track"><div id="xp-fill"></div></div>
     </div>
-    <div style="text-align:right">
+    <div id="game-controls" style="display:none">
+        <button class="btn-exit" onclick="confirmExit()">✕ SALIR</button>
+    </div>
+    <div id="menu-stats" style="text-align:right">
       <div id="user-lvl" style="font-family:'Orbitron'; font-size:0.8rem; color:var(--cyan)">LVL 1</div>
-      <div id="user-xp" style="font-size:0.7rem; color:var(--muted)">0 XP</div>
     </div>
   </header>
 
   <section id="menu" class="screen active">
-    <h2 style="font-family:'Orbitron'; font-size:1.2rem; margin-bottom:5px">CATEGORÍAS</h2>
-    <p style="color:var(--muted); font-size:0.9rem">Todas desbloqueadas. Sube de nivel para aumentar la dificultad.</p>
-    
-    <div class="grid">
-      <div class="card" onclick="preLaunch('logic')"><span class="card-icon">🧩</span><span class="card-title">LÓGICA</span></div>
-      <div class="card" onclick="preLaunch('pairs')"><span class="card-icon">🃏</span><span class="card-title">MEMORIA</span></div>
-      <div class="card" onclick="preLaunch('math')"><span class="card-icon">➕</span><span class="card-title">CÁLCULO</span></div>
-      <div class="card" onclick="preLaunch('simon')"><span class="card-icon">🎮</span><span class="card-title">SECUENCIA</span></div>
-      <div class="card" onclick="preLaunch('focus')"><span class="card-icon">👁️</span><span class="card-title">ENFOQUE</span></div>
-      <div class="card" onclick="preLaunch('speed')"><span class="card-icon">⚡</span><span class="card-title">REFLEJOS</span></div>
+    <div style="margin-bottom:10px">
+        <h2 style="font-size:1.5rem">Entrenamiento</h2>
+        <p style="color:var(--muted); font-size:0.85rem">Selecciona un área para comenzar.</p>
+    </div>
+    <div class="grid-menu">
+      <div class="card-mode" onclick="preLaunch('math')"><span class="card-icon">➕</span><span class="card-title">Cálculo</span></div>
+      <div class="card-mode" onclick="preLaunch('focus')"><span class="card-icon">👁️</span><span class="card-title">Enfoque</span></div>
+      <div class="card-mode" onclick="preLaunch('logic')"><span class="card-icon">🧩</span><span class="card-title">Lógica</span></div>
+      <div class="card-mode" onclick="preLaunch('speed')"><span class="card-icon">⚡</span><span class="card-title">Reflejos</span></div>
     </div>
   </section>
 
   <section id="game" class="screen">
-    <div class="hud-small">
-      <span id="game-info">RONDA 1/10</span>
-      <span id="game-score">PUNTOS: 0</span>
-    </div>
     <div id="arena"></div>
   </section>
 
   <div id="overlay-instr" class="overlay">
-    <div class="instr-icon" id="ins-icon">🧩</div>
-    <h2 id="ins-title" style="font-family:'Orbitron'; margin-bottom:15px">TÍTULO</h2>
-    <p id="ins-body" style="line-height:1.6; color:var(--muted)"></p>
-    <button class="btn-play" onclick="startGame()">¡ENTENDIDO!</button>
+    <div id="ins-icon" style="font-size:4rem; margin-bottom:20px">🧩</div>
+    <h2 id="ins-title" style="font-family:'Orbitron'; margin-bottom:15px; color:var(--cyan)">TÍTULO</h2>
+    <p id="ins-body" style="line-height:1.6; color:var(--muted); max-width:300px"></p>
+    <button class="btn-start" onclick="startGame()">INICIAR RANGO</button>
   </div>
 
   <div id="overlay-res" class="overlay">
-    <h1 style="font-family:'Orbitron'; color:var(--cyan)">¡SESIÓN FINALIZADA!</h1>
-    <div id="res-xp-gain" style="font-size:3rem; font-weight:900; margin:20px 0">+0 XP</div>
-    <button class="btn-play" onclick="showScreen('menu')">VOLVER AL INICIO</button>
+    <h1 style="font-family:'Orbitron'; color:var(--success)">RESULTADOS</h1>
+    <div id="res-xp-gain" style="font-size:3.5rem; font-weight:900; margin:20px 0">+0 XP</div>
+    <button class="btn-start" onclick="goHome()">VOLVER AL MENÚ</button>
   </div>
 </div>
 
 <script>
-/* ── AUDIO ENGINE (CORREGIDO) ── */
+/* ── AUDIO ── */
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-function playSfx(freq, type="sine", duration=0.1) {
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.type = type;
-    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc.start();
-    osc.stop(audioCtx.currentTime + duration);
+function playSfx(f, t="sine", d=0.1) {
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = t; o.frequency.setValueAtTime(f, audioCtx.currentTime);
+    g.gain.setValueAtTime(0.1, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + d);
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start(); o.stop(audioCtx.currentTime + d);
 }
 
-const sfx = {
-    tap: () => playSfx(400, "triangle"),
-    correct: () => { playSfx(600); setTimeout(() => playSfx(800), 50); },
-    wrong: () => { playSfx(200, "sawtooth", 0.3); },
-    levelUp: () => { playSfx(500); playSfx(700); playSfx(900); }
-};
+/* ── ESTADO Y PERFIL ── */
+let profile = JSON.parse(localStorage.getItem('neurox_v2_p')) || { xp: 0, lvl: 1 };
+let currentGame = { mode: '', round: 1, score: 0 };
 
-/* ── PROGRESO ── */
-let profile = JSON.parse(localStorage.getItem('neurox_profile')) || { xp: 0, lvl: 1 };
-function saveProfile() {
-    localStorage.setItem('neurox_profile', JSON.stringify(profile));
-    updateProfileUI();
-}
-function updateProfileUI() {
-    const xpBase = (profile.lvl - 1) * 1000;
-    const currentXP = profile.xp - xpBase;
-    const progress = (currentXP / 1000) * 100;
-    document.getElementById('xp-fill').style.width = progress + '%';
+function updateUI() {
     document.getElementById('user-lvl').innerText = `LVL ${profile.lvl}`;
-    document.getElementById('user-xp').innerText = `${profile.xp} XP TOTAL`;
+    document.getElementById('xp-fill').style.width = `${(profile.xp % 1000) / 10}%`;
+    localStorage.setItem('neurox_v2_p', JSON.stringify(profile));
 }
 
-/* ── GESTIÓN DE PANTALLAS ── */
 function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
-    document.getElementById('overlay-res').classList.remove('active');
-    document.getElementById('overlay-instr').classList.remove('active');
+    document.getElementById('game-controls').style.display = (id === 'game') ? 'block' : 'none';
+    document.getElementById('menu-stats').style.display = (id === 'menu') ? 'block' : 'none';
 }
 
-/* ── LÓGICA DE JUEGOS ── */
-let currentGame = { mode: '', round: 1, score: 0 };
 const DESCS = {
-    logic: { icon:'🧩', t:'Lógica Algebraica', b:'Resuelve la equivalencia de los iconos. Recuerda: la multiplicación se resuelve antes que la suma.' },
-    pairs: { icon:'🃏', t:'Memoria Visual', b:'Encuentra todas las parejas de cartas iguales en el menor número de movimientos.' },
-    math: { icon:'➕', t:'Cálculo Mental', b:'Resuelve las operaciones lo más rápido posible. La dificultad sube con cada acierto.' },
-    simon: { icon:'🎮', t:'Secuencia Simon', b:'Memoriza el orden en que parpadean los colores y repítelo exactamente.' },
-    focus: { icon:'👁️', t:'Enfoque Selectivo', b:'Busca la letra o símbolo intruso entre un mar de caracteres similares.' },
-    speed: { icon:'⚡', t:'Reflejos Puros', b:'Toca los núcleos de energía en cuanto aparezcan antes de que se desvanezcan.' }
+    math: { i:'➕', t:'Cálculo Veloz', b:'Resuelve la operación. Los botones son ahora de alto contraste para mejorar la visibilidad.' },
+    focus: { i:'👁️', t:'Enfoque Dinámico', b:'Encuentra el carácter intruso. El objetivo y el fondo cambian en cada ronda.' },
+    logic: { i:'🧩', t:'Patrón Lógico', b:'Encuentra el número que falta en la secuencia lógica mostrada.' },
+    speed: { i:'⚡', t:'Reflejos', b:'Toca los objetivos lo más rápido posible.' }
 };
 
 function preLaunch(mode) {
-    sfx.tap();
+    playSfx(440);
     currentGame = { mode, round: 1, score: 0 };
     const d = DESCS[mode];
-    document.getElementById('ins-icon').innerText = d.icon;
+    document.getElementById('ins-icon').innerText = d.i;
     document.getElementById('ins-title').innerText = d.t;
     document.getElementById('ins-body').innerText = d.b;
     document.getElementById('overlay-instr').classList.add('active');
 }
 
 function startGame() {
-    sfx.tap();
     document.getElementById('overlay-instr').classList.remove('active');
     showScreen('game');
     loadRound();
@@ -176,112 +157,80 @@ function startGame() {
 
 function loadRound() {
     if(currentGame.round > 10) { finishGame(); return; }
-    
-    document.getElementById('game-info').innerText = `RONDA ${currentGame.round}/10`;
     const arena = document.getElementById('arena');
     arena.innerHTML = '';
 
-    switch(currentGame.mode) {
-        case 'logic': playLogicPro(); break;
-        case 'math': playMath(); break;
-        case 'focus': playFocus(); break;
-        // Los otros modos siguen una estructura similar escalada por profile.lvl
-        default: arena.innerHTML = "Próximamente en esta versión..."; setTimeout(finishGame, 1000);
+    if(currentGame.mode === 'math') {
+        const a = Math.floor(Math.random() * (10 * profile.lvl)) + 2;
+        const b = Math.floor(Math.random() * (10 * profile.lvl)) + 2;
+        const res = a + b;
+        const opts = [res, res + 2, res - 1, res + 10].sort(() => Math.random() - 0.5);
+        
+        arena.innerHTML = `
+            <div class="math-display">${a} + ${b}</div>
+            <div class="answer-grid">
+                ${opts.map(n => `<button class="btn-ans" onclick="check(${n}, ${res})">${n}</button>`).join('')}
+            </div>
+        `;
+    } 
+    else if(currentGame.mode === 'focus') {
+        const sets = [["O","0"], ["M","N"], ["E","F"], ["I","1"], ["S","5"], ["X","K"]];
+        const currentSet = sets[Math.floor(Math.random()*sets.length)];
+        const target = currentSet[1];
+        const bg = currentSet[0];
+        const targetIdx = Math.floor(Math.random() * 25);
+        
+        arena.innerHTML = `<div style="margin-bottom:20px; color:var(--cyan)">Busca la "${target}"</div>`;
+        const grid = document.createElement('div');
+        grid.className = 'focus-grid';
+        for(let i=0; i<25; i++) {
+            const char = (i === targetIdx) ? target : bg;
+            const cell = document.createElement('div');
+            cell.className = 'focus-cell';
+            cell.innerText = char;
+            cell.onclick = () => check(char, target);
+            grid.appendChild(cell);
+        }
+        arena.appendChild(grid);
+    }
+    else {
+        arena.innerHTML = `<div class="card-mode">Modo en construcción</div>`;
+        setTimeout(finishGame, 1000);
     }
 }
 
-function playLogicPro() {
-    const arena = document.getElementById('arena');
-    const v1 = Math.floor(Math.random() * 5 * profile.lvl) + 2;
-    const v2 = Math.floor(Math.random() * 5 * profile.lvl) + 2;
-    const res = v1 + (v2 * 2);
-    
-    arena.innerHTML = `
-        <div class="math-box" style="font-size:1.5rem">
-            🍎 + 🍎 = ${v1*2}<br>
-            🍌 + 🍌 = ${v2*2}<br>
-            🍎 + (🍌 x 2) = ?
-        </div>
-        <div class="grid" style="width:100%">
-            ${[res, res+2, res-2, v1+v2].sort(()=>Math.random()-.5).map(n => 
-                `<button class="card" onclick="checkAns(${n}, ${res})">${n}</button>`
-            ).join('')}
-        </div>
-    `;
-}
-
-function playMath() {
-    const arena = document.getElementById('arena');
-    const a = Math.floor(Math.random() * 10 * profile.lvl) + 1;
-    const b = Math.floor(Math.random() * 10 * profile.lvl) + 1;
-    const res = a + b;
-    arena.innerHTML = `
-        <div class="math-box">${a} + ${b}</div>
-        <div class="grid" style="width:100%">
-            ${[res, res+1, res-1, res+5].sort(()=>Math.random()-.5).map(n => 
-                `<button class="card" onclick="checkAns(${n}, ${res})">${n}</button>`
-            ).join('')}
-        </div>
-    `;
-}
-
-function playFocus() {
-    const arena = document.getElementById('arena');
-    const chars = "0ODQ";
-    const target = "C";
-    let gridHtml = '<div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:10px">';
-    const targetIdx = Math.floor(Math.random() * 25);
-    
-    for(let i=0; i<25; i++) {
-        const isT = i === targetIdx;
-        gridHtml += `<div class="card" style="padding:10px" onclick="checkAns(${isT?1:0}, 1)">${isT?target:chars[Math.floor(Math.random()*chars.length)]}</div>`;
-    }
-    gridHtml += '</div>';
-    arena.innerHTML = gridHtml;
-}
-
-function checkAns(val, target) {
+function check(val, target) {
     if(val === target) {
-        sfx.correct();
-        currentGame.score += (100 * profile.lvl);
-        spawnParticles();
+        playSfx(880);
+        currentGame.score += 100;
     } else {
-        sfx.wrong();
+        playSfx(220, "sawtooth");
     }
     currentGame.round++;
-    setTimeout(loadRound, 400);
+    loadRound();
 }
 
-function spawnParticles() {
-    for(let i=0; i<10; i++) {
-        const p = document.createElement('div');
-        p.className = 'pt';
-        p.innerText = "✨";
-        p.style.left = "50%"; p.style.top = "50%";
-        p.style.setProperty('--x', (Math.random()-0.5)*200 + "px");
-        p.style.setProperty('--y', (Math.random()-0.5)*200 + "px");
-        document.body.appendChild(p);
-        setTimeout(() => p.remove(), 600);
+function confirmExit() {
+    if(confirm("¿Seguro que quieres salir? Perderás el progreso de esta ronda.")) {
+        goHome();
     }
+}
+
+function goHome() {
+    document.getElementById('overlay-res').classList.remove('active');
+    showScreen('menu');
 }
 
 function finishGame() {
-    const gainedXP = Math.floor(currentGame.score / 2);
-    profile.xp += gainedXP;
-    
-    const nextLvl = Math.floor(profile.xp / 1000) + 1;
-    if(nextLvl > profile.lvl) {
-        profile.lvl = nextLvl;
-        sfx.levelUp();
-    }
-    
-    saveProfile();
-    document.getElementById('res-xp-gain').innerText = `+${gainedXP} XP`;
+    const gain = Math.floor(currentGame.score * (profile.lvl * 0.5));
+    profile.xp += gain;
+    profile.lvl = Math.floor(profile.xp / 1000) + 1;
+    updateUI();
+    document.getElementById('res-xp-gain').innerText = `+${gain} XP`;
     document.getElementById('overlay-res').classList.add('active');
 }
 
-// Init
-updateProfileUI();
+updateUI();
 </script>
 </body>
 </html>
