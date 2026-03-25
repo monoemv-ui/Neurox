@@ -2,114 +2,911 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Neurox PRO</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta name="theme-color" content="#0a0a1a"/>
+<meta name="description" content="Neurox 2.0 — Eleva tu potencial cognitivo con entrenamiento mental adaptativo."/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Neurox"/>
+<title>Neurox — Entrenamiento Mental Avanzado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet"/>
 <style>
-:root{
---bg:#0f1226;--card:#1b1f3a;--accent:#6c63ff;--accent2:#22d3ee;--text:#f1f5f9;--muted:#94a3b8;
+:root {
+  --bg: #0a0a1a; --s1: #111126; --s2: #161632; --s3: #1d1d42;
+  --brd: rgba(255,255,255,0.06); --brd2: rgba(255,255,255,0.12);
+  --text: #f0f0ff; --muted: #7878a0; --dim: #4a4a70;
+  --accent: #7c3aed; --accent-dim: #4c1d95;
+  --cyan: #06b6d4; --lime: #84cc16; --amber: #f59e0b; --rose: #f43f5e;
+  --g-easy: linear-gradient(135deg, #22c55e, #15803d);
+  --g-med: linear-gradient(135deg, #f59e0b, #b45309);
+  --g-hard: linear-gradient(135deg, #ef4444, #b91c1c);
+  --fx-glow: 0 0 20px rgba(124,58,237,0.3);
+  --r-m: 16px; --r-l: 24px; --ease: cubic-bezier(0.23, 1, 0.32, 1);
 }
-body{margin:0;font-family:'Inter',sans-serif;background:linear-gradient(160deg,#0f1226,#1b1f3a);color:var(--text)}
-header{display:flex;justify-content:space-between;padding:16px}
-.logo{font-weight:700;color:var(--accent)}
-.hud{display:flex;gap:10px}
-.hud-item{background:var(--card);padding:10px;border-radius:10px;text-align:center}
-.screen{display:none;padding:20px}
-.screen.active{display:block}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.card{background:var(--card);padding:16px;border-radius:14px;cursor:pointer}
-.btn{background:var(--accent);border:none;padding:12px;border-radius:10px;color:white;cursor:pointer}
-select{padding:8px;border-radius:8px;margin-top:10px}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;letter-spacing:-0.2px;}
+button{cursor:pointer;font-family:inherit;border:none;outline:none;background:none;transition:all 0.2s var(--ease);}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(circle at 10% 10%,rgba(124,58,237,0.12) 0%,transparent 40%),
+    radial-gradient(circle at 90% 90%,rgba(6,182,212,0.08) 0%,transparent 40%);}
+#app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;}
+
+/* UI Elements */
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;
+  background:rgba(10,10,26,0.8);backdrop-filter:blur(15px);border-bottom:1px solid var(--brd);
+  position:sticky;top:0;z-index:50;}
+.logo{font-family:'Orbitron',sans-serif;font-size:1.3rem;font-weight:900;letter-spacing:1.5px;
+  background:linear-gradient(135deg,var(--text),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.hud{display:flex;gap:14px;align-items:center;}
+.hud-item{text-align:right;}
+.hud-val{font-family:'Orbitron',sans-serif;font-size:1.1rem;font-weight:800;color:var(--text);line-height:1;}
+.hud-lbl{font-size:0.6rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-top:2px;}
+.diff-pill{padding:3px 8px;border-radius:6px;font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#fff;}
+
+.screen{display:none;flex-direction:column;align-items:center;padding:20px 16px 40px;width:100%;max-width:600px;margin:0 auto;animation:fadeIn 0.4s var(--ease);}
+.screen.active{display:flex;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+h1.pts{font-family:'Orbitron',sans-serif;font-weight:900;letter-spacing:-1px;color:var(--text);line-height:1.1;}
+p.sub{color:var(--muted);font-size:0.9rem;margin-top:6px;}
+
+/* WELCOME & DIFFICULT */
+#welcome{justify-content:center;text-align:center;min-height:calc(100vh - 60px);}
+.welcome-hero{margin-bottom:40px;}
+.welcome-hero h1{font-size:clamp(2.5rem,10vw,3.5rem);}
+.welcome-hero h1 em{font-style:normal;color:var(--cyan);text-shadow:0 0 15px rgba(6,182,212,0.4);}
+.diff-group{width:100%;display:flex;flex-direction:column;gap:12px;}
+.btn-diff{width:100%;padding:20px;border-radius:var(--r-m);background:var(--s1);border:1px solid var(--brd);
+  text-align:left;display:flex;align-items:center;justify-content:space-between;position:relative;overflow:hidden;}
+.btn-diff:hover{border-color:var(--brd2);transform:translateY(-2px);background:var(--s2);}
+.btn-diff::after{content:'';position:absolute;width:6px;height:100%;right:0;top:0;}
+.btn-diff.easy::after{background:var(--g-easy);}.btn-diff.med::after{background:var(--g-med);}.btn-diff.hard::after{background:var(--g-hard);}
+.diff-title{font-size:1.1rem;font-weight:700;color:var(--text);}
+.diff-desc{font-size:0.8rem;color:var(--muted);margin-top:2px;}
+.diff-icon{font-size:1.5rem;}
+
+/* HOME */
+#home{gap:24px;}
+.home-header{text-align:center;margin-top:10px;}
+.home-header h1{font-size:1.8rem;}
+.modes-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;}
+.mode-card{background:var(--s1);border:1px solid var(--brd);border-radius:var(--r-m);
+  padding:20px 16px;text-align:left;position:relative;display:flex;flex-direction:column;height:100%;}
+.mode-card:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:var(--fx-glow);}
+.mode-icon{font-size:2rem;margin-bottom:12px;display:block;}
+.mode-name{font-weight:700;font-size:1rem;color:var(--text);}
+.mode-desc{font-size:0.75rem;color:var(--muted);margin-top:4px;line-height:1.4;flex-grow:1;}
+.mode-best{margin-top:12px;font-size:0.7rem;color:var(--dim);border-top:1px solid var(--brd);padding-top:8px;}
+.mode-best span{color:var(--amber);font-weight:600;}
+
+/* GAME SCREEN */
+#game{gap:16px;}
+.game-bar{width:100%;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:0 4px;}
+.gt-wrapper{display:flex;align-items:center;gap:8px;}
+.game-icon-mini{font-size:1.2rem;}
+.game-title{font-family:'Orbitron',sans-serif;font-size:0.8rem;letter-spacing:1px;color:var(--muted);text-transform:uppercase;}
+.pill{background:var(--s2);border:1px solid var(--brd2);border-radius:8px;
+  padding:6px 12px;font-size:0.85rem;font-weight:600;display:inline-flex;align-items:center;gap:6px;}
+#pill-time{color:var(--cyan);font-family:'Orbitron',sans-serif;min-width:70px;justify-content:center;}
+#pill-round{color:var(--text);}
+.progress-container{width:100%;height:4px;background:var(--s3);border-radius:2px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--cyan));width:0%;transition:width 0.3s ease;}
+.msg-box{background:var(--s2);border:1px solid var(--accent);border-radius:12px;padding:14px;
+  text-align:center;width:100%;font-size:0.9rem;line-height:1.5;box-shadow:var(--fx-glow);margin:8px 0;}
+.msg-box strong{color:var(--cyan);font-weight:600;}
+#game-arena{width:100%;display:flex;flex-direction:column;align-items:center;gap:16px;animation:arenaIn 0.3s ease;}
+@keyframes arenaIn{from{opacity:0;transform:scale(0.95);}to{opacity:1;transform:scale(1);}}
+
+/* RESULTS */
+#result{justify-content:center;gap:24px;text-align:center;min-height:calc(100vh - 60px);}
+.res-header{display:flex;flex-direction:column;align-items:center;gap:10px;}
+.result-icon{font-size:4rem;animation:popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);}
+@keyframes popIn{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}
+.score-display{margin:10px 0;}
+.score-lbl{font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+.score-big{font-family:'Orbitron',sans-serif;font-size:3.5rem;font-weight:900;
+  background:linear-gradient(135deg,#fff,var(--cyan));-webkit-background-clip:text;color:transparent;line-height:1;}
+.new-rec{background:rgba(245,158,11,0.15);border:1px solid var(--amber);color:var(--amber);
+  border-radius:6px;padding:6px 12px;font-size:0.75rem;font-weight:700;letter-spacing:1px;margin-top:10px;animation:pulse amber 2s infinite;}
+.result-btns{display:flex;flex-direction:column;gap:12px;width:100%;max-width:300px;margin-top:20px;}
+
+/* Buttons */
+.btn-p{background:linear-gradient(135deg,var(--accent),#6d28d9);color:#fff;border-radius:12px;
+  padding:16px;font-size:0.95rem;font-weight:700;letter-spacing:0.5px;box-shadow:0 4px 15px rgba(124,58,237,0.3);}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(124,58,237,0.4);}
+.btn-p:active{transform:translateY(0);}
+.btn-s{background:var(--s2);color:var(--text);border:1px solid var(--brd2);border-radius:12px;
+  padding:16px;font-size:0.95rem;font-weight:600;}
+.btn-s:hover{background:var(--s3);border-color:var(--muted);}
+
+/* JUEGOS STYLES (Optimizados para claridad) */
+/* Pairs */
+.pairs-grid{display:grid;gap:8px;width:100%;max-width:400px;}
+.pcard{aspect-ratio:1;perspective:1000px;}
+.pcard-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform 0.4s var(--ease);border-radius:10px;}
+.pcard.flip .pcard-inner, .pcard.done .pcard-inner{transform:rotateY(180deg);}
+.pcard-f{position:absolute;inset:0;border-radius:10px;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;border:1px solid var(--brd);}
+.pcard-back{background:var(--s3);color:var(--dim);font-size:1.5rem;font-weight:900;}
+.pcard-back::after{content:'?';}
+.pcard-front{background:var(--s2);transform:rotateY(180deg);font-size:clamp(1.2rem,5vw,2rem);border-color:var(--brd2);}
+.pcard.done .pcard-front{background:rgba(16,185,129,0.1);border-color:var(--lime);color:var(--lime);}
+.pcard.bad .pcard-inner{animation:shakeError 0.4sVar(--ease);}
+@keyframes shakeError{0%,100%{transform:rotateY(180deg) translateX(0);}25%{transform:rotateY(180deg) translateX(-4px);}75%{transform:rotateY(180deg) translateX(4px);}}
+
+/* Shapes */
+.shapes-study{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:360px;}
+.shape-card{background:var(--s2);border:1px solid var(--brd2);border-radius:12px;
+  aspect-ratio:1;display:flex;align-items:center;justify-content:center;padding:15%;transition:all 0.2s;}
+.shape-card.clickable:hover{border-color:var(--accent);transform:scale(1.03);background:var(--s3);}
+.shape-card.correct{border-color:var(--lime)!important;background:rgba(132,204,22,0.15)!important;animation:pulseLime 0.5s;}
+.shape-card.wrong{border-color:var(--rose)!important;background:rgba(244,63,94,0.15)!important;animation:shakeError 0.4s;}
+.shape-card svg{width:100%;height:100%;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3));}
+
+/* Simon */
+.simon-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:300px;margin-top:10px;}
+.simon-btn{height:110px;border-radius:20px;border:2px solid transparent;position:relative;transition:all 0.15s;}
+.simon-btn::after{content:'';position:absolute;inset:0;background:#fff;opacity:0;border-radius:18px;transition:opacity 0.1s;}
+.simon-btn.flash::after{opacity:0.5;}
+.simon-btn.active-press{transform:scale(0.94);box-shadow:inset 0 2px 8px rgba(0,0,0,0.4);}
+.sb1{background:rgba(239,68,68,0.2);border-color:#ef4444;color:#fca5a5;}
+.sb2{background:rgba(59,130,246,0.2);border-color:#3b82f6;color:#93c5fd;}
+.sb3{background:rgba(34,197,94,0.2);border-color:#22c55e;color:#86efac;}
+.sb4{background:rgba(245,158,11,0.2);border-color:#f59e0b;color:#fcd34d;}
+.simon-icon{font-size:2.5rem;display:flex;align-items:center;justify-content:center;height:100%;}
+
+/* Pattern */
+.pattern-grid{display:grid;gap:6px;width:100%;margin:0 auto;}
+.pattern-cell{aspect-ratio:1;border-radius:6px;background:var(--s3);border:1px solid transparent;transition:all 0.15s;}
+.pattern-cell.lit{border-color:rgba(255,255,255,0.15);box-shadow:inset 0 0 10px rgba(0,0,0,0.2);}
+.pattern-cell.clickable:hover{transform:scale(0.95);filter:brightness(1.2);}
+@keyframes correctFlash{0%,100%{filter:brightness(1);}50%{filter:brightness(2) saturate(1.5);}}
+@keyframes wrongFlash{0%,100%{filter:brightness(1);}50%{filter:brightness(0.3) saturate(0);}}
+.cf{animation:correctFlash 0.3s ease;}.wf{animation:wrongFlash 0.3s ease;}
+
+/* Spot */
+.spot-grid{display:grid;gap:6px;width:100%;margin:0 auto;}
+.spot-cell{aspect-ratio:1;border-radius:8px;background:var(--s2);border:1px solid var(--brd2);display:flex;
+  align-items:center;justify-content:center;font-size:clamp(1rem,4vw,1.8rem);transition:all 0.2s;}
+.spot-cell.clickable:hover{transform:scale(1.05);border-color:var(--accent);background:var(--s3);}
+.spot-cell.found{border-color:var(--lime)!important;background:rgba(132,204,22,0.15)!important;color:var(--lime);}
+.spot-cell.wrong-pick{border-color:var(--rose)!important;animation:shakeError 0.4s;}
+
+/* Rotation */
+.rotation-choices{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:360px;}
+.rot-choice{background:var(--s2);border:1px solid var(--brd2);border-radius:12px;
+  aspect-ratio:1;display:flex;align-items:center;justify-content:center;padding:15%;transition:all 0.2s;}
+.rot-choice.clickable:hover{border-color:var(--accent);background:var(--s3);}
+.rot-choice.correct{border-color:var(--lime);background:rgba(132,204,22,0.1);animation:pulseLime 0.5s;}
+.rot-choice.wrong{border-color:var(--rose);background:rgba(244,63,94,0.1);animation:shakeError 0.4s;}
+.rot-choice svg{width:100%;height:100%;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3));}
+
+/* OVERLAYS */
+.overlay{position:fixed;inset:0;background:rgba(5,5,15,0.95);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;z-index:100;backdrop-filter:blur(10px);padding:20px;animation:fadeIn 0.3s;}
+.hidden{display:none!important;}
+.countdown-num{font-family:'Orbitron',sans-serif;font-size:8rem;font-weight:900;
+  background:linear-gradient(135deg,#fff,var(--accent));-webkit-background-clip:text;color:transparent;animation:countPop 0.9s infinite;}
+@keyframes countPop{0%{transform:scale(0.8);opacity:0;} 50%{transform:scale(1.1);opacity:1;} 100%{transform:scale(1);opacity:1;}}
+
+.study-title{font-family:'Orbitron',sans-serif;font-size:0.85rem;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;}
+.study-timer{font-family:'Orbitron',sans-serif;font-size:3rem;font-weight:900;color:var(--amber);margin-bottom:20px;}
+
+/* PWA Install Banner */
+#install-banner{position:fixed;bottom:20px;left:20px;right:20px;background:var(--s2);
+  border:1px solid var(--accent);border-radius:16px;padding:16px;
+  display:flex;align-items:center;gap:12px;box-shadow:0 10px 30px rgba(0,0,0,0.5);
+  z-index:200;transition:transform 0.4s var(--ease);transform:translateY(150%);}
+#install-banner.show{transform:translateY(0);}
+.ib-icon{font-size:2rem;}
+.ib-text strong{font-size:0.9rem;display:block;color:var(--text);}
+.ib-text span{font-size:0.75rem;color:var(--muted);}
+.ib-btns{display:flex;gap:8px;margin-left:auto;}
+.ib-install{background:var(--accent);color:#fff;border-radius:8px;padding:8px 14px;font-size:0.8rem;font-weight:700;}
+.ib-close{color:var(--dim);font-size:1.2rem;padding:5px;}
+
+/* Animations helper */
+@keyframes pulseLime{0%{box-shadow:0 0 0 0 rgba(132,204,22,0.5);} 70%{box-shadow:0 0 0 10px rgba(132,204,22,0);} 100%{box-shadow:0 0 0 0 rgba(132,204,22,0);}}
+.pt{position:fixed;pointer-events:none;font-size:1.2rem;animation:ptFly 0.8s ease-out forwards;z-index:999;}
+@keyframes ptFly{0%{transform:translate(0,0) scale(1);opacity:1;} 100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0;}}
 </style>
 </head>
 <body>
+<div id="app">
+  <header>
+    <div class="logo">NEUROX</div>
+    <div class="hud" id="hud" style="display:none">
+      <div class="hud-item">
+        <div id="hud-diff" class="diff-pill"></div>
+        <div class="hud-lbl">MODO</div>
+      </div>
+      <div class="hud-item">
+        <div class="hud-val" id="hud-score">0</div>
+        <div class="hud-lbl">PUNTOS</div>
+      </div>
+    </div>
+  </header>
 
-<header>
-<div class="logo">Neurox PRO</div>
-<div class="hud">
-<div class="hud-item"><div id="score">0</div><small>PTS</small></div>
-<div class="hud-item"><div id="level">1</div><small>LVL</small></div>
-<div class="hud-item"><div id="combo">0</div><small>COMBO</small></div>
+  <section class="screen active" id="welcome">
+    <div class="welcome-hero">
+      <h1 class="pts">Desbloquea<br>tu <em>Mente</em></h1>
+      <p class="sub">Selecciona tu nivel para comenzar el entrenamiento.</p>
+    </div>
+    <div class="diff-group">
+      <button class="btn-diff easy" onclick="setGlobalDifficulty('easy')">
+        <div>
+          <div class="diff-title">Principiante</div>
+          <div class="diff-desc">Ritmo relajado, desafíos lógicos básicos.</div>
+        </div>
+        <span class="diff-icon">🌱</span>
+      </button>
+      <button class="btn-diff med" onclick="setGlobalDifficulty('medium')">
+        <div>
+          <div class="diff-title">Avanzado</div>
+          <div class="diff-desc">El estándar de Neurox. Reto equilibrado.</div>
+        </div>
+        <span class="diff-icon">🧠</span>
+      </button>
+      <button class="btn-diff hard" onclick="setGlobalDifficulty('hard')">
+        <div>
+          <div class="diff-title">Élite</div>
+          <div class="diff-desc">Tiempo límite estricto y alta complejidad.</div>
+        </div>
+        <span class="diff-icon">⚡</span>
+      </button>
+    </div>
+  </section>
+
+  <section class="screen" id="home">
+    <div class="home-header">
+      <h1 class="pts">Gimnasia Cerebral</h1>
+      <p class="sub">Elige un área cognitiva para potenciar hoy.</p>
+    </div>
+    <div class="modes-grid">
+      <button class="mode-card" onclick="launchMode('pairs')">
+        <span class="mode-icon">🃏</span>
+        <div class="mode-name">Memoria Visual</div>
+        <div class="mode-desc">Encuentra parejas de emojis ocultos.</div>
+        <div class="mode-best">Récord: <span id="best-pairs">—</span></div>
+      </button>
+      <button class="mode-card" onclick="launchMode('shapes')">
+        <span class="mode-icon">🔷</span>
+        <div class="mode-name">Reconocimiento</div>
+        <div class="mode-desc">Memoriza e identifica formas exactas.</div>
+        <div class="mode-best">Récord: <span id="best-shapes">—</span></div>
+      </button>
+      <button class="mode-card" onclick="launchMode('simon')">
+        <span class="mode-icon">🎮</span>
+        <div class="mode-name">Retención Progresiva</div>
+        <div class="mode-desc">Repite secuencias lógicas crecientes.</div>
+        <div class="mode-best">Récord: <span id="best-simon">—</span></div>
+      </button>
+      <button class="mode-card" onclick="launchMode('pattern')">
+        <span class="mode-icon">🧩</span>
+        <div class="mode-name">Habilidad Espacial</div>
+        <div class="mode-desc">Recrea patrones de colores en la grilla.</div>
+        <div class="mode-best">Récord: <span id="best-pattern">—</span></div>
+      </button>
+      <button class="mode-card" onclick="launchMode('spot')">
+        <span class="mode-icon">👁️</span>
+        <div class="mode-name">Atención al Detalle</div>
+        <div class="mode-desc">Detecta cambios sutiles entre imágenes.</div>
+        <div class="mode-best">Récord: <span id="best-spot">—</span></div>
+      </button>
+      <button class="mode-card" onclick="launchMode('rotation')">
+        <span class="mode-icon">🌀</span>
+        <div class="mode-name">Orientación Mental</div>
+        <div class="mode-desc">Recuerda la rotación de la figura.</div>
+        <div class="mode-best">Récord: <span id="best-rotation">—</span></div>
+      </button>
+    </div>
+    <button class="btn-s" onclick="showScreen('welcome')" style="width:100%; margin-top:10px;">Cambiar Dificultad</button>
+  </section>
+
+  <section class="screen" id="game">
+    <div class="game-bar">
+      <div class="gt-wrapper">
+        <span id="game-mode-icon" class="game-icon-mini"></span>
+        <div class="game-title" id="game-mode-title">MODO</div>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <div class="pill" id="pill-time">⏱ —</div>
+        <div class="pill" id="pill-round">R 1/10</div>
+      </div>
+    </div>
+    <div class="progress-container"><div class="progress-fill" id="g-prog"></div></div>
+    <div class="msg-box" id="msg-box">Preparando...</div>
+    <div id="game-arena"></div>
+  </section>
+
+  <section class="screen" id="result">
+    <div class="res-header">
+      <div class="result-icon" id="res-icon">🏆</div>
+      <h1 class="pts" id="res-title">¡Excelente!</h1>
+      <p class="sub" id="res-subtitle">Has completado el entrenamiento.</p>
+    </div>
+    <div class="score-display">
+      <div class="score-lbl">Puntuación Final</div>
+      <div class="score-big" id="res-score">0</div>
+      <div class="new-rec" id="res-rec" style="display:none">⭐ NUEVO RÉCORD LOCAL</div>
+    </div>
+    <div class="result-btns">
+      <button class="btn-p" id="res-replay">REPETIR DESAFÍO</button>
+      <button class="btn-s" onclick="goHome()">VOLVER AL INICIO</button>
+    </div>
+  </section>
 </div>
-</header>
 
-<section id="home" class="screen active">
-<h2>Selecciona modo</h2>
-<div class="grid">
-<div class="card" onclick="startGame('pairs')">🃏 PARES</div>
-<div class="card" onclick="startGame('simon')">🎮 SIMON</div>
-<div class="card" onclick="startGame('reaction')">⚡ REFLEJOS</div>
-<div class="card" onclick="startGame('memory')">🧠 MEMORIA</div>
+<div id="countdown-overlay" class="overlay hidden">
+  <div class="countdown-num" id="countdown-num">3</div>
 </div>
 
-<select id="difficulty">
-<option value="easy">Fácil</option>
-<option value="medium">Medio</option>
-<option value="hard">Difícil</option>
-</select>
-</section>
+<div id="study-overlay" class="overlay hidden">
+  <div class="study-title" id="study-title">MEMORIZA</div>
+  <div class="study-timer" id="study-timer">3</div>
+  <div id="study-content" style="width:100%; display:flex; justify-content:center;"></div>
+</div>
 
-<section id="game" class="screen">
-<h2 id="mode"></h2>
-<p id="status"></p>
-<button class="btn" onclick="simulatePlay()">Acción</button>
-<button class="btn" onclick="fail()">Fallar</button>
-</section>
-
-<section id="result" class="screen">
-<h2>Resultado</h2>
-<p id="final"></p>
-<button class="btn" onclick="goHome()">Inicio</button>
-</section>
+<div id="install-banner">
+  <span class="ib-icon">📲</span>
+  <div class="ib-text"><strong>Instalar Neurox</strong><span>Entrena en cualquier lugar, sin internet.</span></div>
+  <div class="ib-btns">
+    <button class="ib-install" id="ib-install-btn">Instalar</button>
+    <button class="ib-close" onclick="dismissInstall()">✕</button>
+  </div>
+</div>
 
 <script>
-let score=0,combo=0;
-let difficulty='easy';
-let player={xp:parseInt(localStorage.getItem('xp')||0),level:parseInt(localStorage.getItem('lvl')||1)};
+/* ── CONFIGURACIÓN DE DIFICULTAD GLOBAL ── */
+const DIFF_CONFIG = {
+  easy: {
+    label: 'Principiante', color: '#22c55e',
+    pairs: { baseGrid: 4, roundsTo5: 99 }, // Casi siempre 4x4
+    shapes: { baseCount: 2, timeMod: 1.2 },
+    simon: { startSeq: 2, speedMod: 0.8 },
+    pattern: { baseGrid: 3, roundsTo4: 6 },
+    spot: { baseGrid: 3, maxChanges: 1 },
+    rotation: { angles: [0, 90, 180, 270] },
+    timeLimitMod: 1.3, ptsMod: 0.7
+  },
+  medium: {
+    label: 'Avanzado', color: '#f59e0b',
+    pairs: { baseGrid: 4, roundsTo5: 6 },
+    shapes: { baseCount: 3, timeMod: 1.0 },
+    simon: { startSeq: 3, speedMod: 1.0 },
+    pattern: { baseGrid: 4, roundsTo5: 7 },
+    spot: { baseGrid: 4, maxChanges: 2 },
+    rotation: { angles: [0, 45, 90, 135, 180, 225, 270, 315] },
+    timeLimitMod: 1.0, ptsMod: 1.0
+  },
+  hard: {
+    label: 'Élite', color: '#ef4444',
+    pairs: { baseGrid: 4, roundsTo5: 3 }, // Sube a 5x4 rápido
+    shapes: { baseCount: 4, timeMod: 0.8 },
+    simon: { startSeq: 4, speedMod: 1.3 },
+    pattern: { baseGrid: 4, roundsTo5: 4 }, // Sube a 5x5 rápido
+    spot: { baseGrid: 4, maxChanges: 3 },
+    rotation: { angles: [0, 45, 90, 135, 180, 225, 270, 315] },
+    timeLimitMod: 0.8, ptsMod: 1.4
+  }
+};
 
-function $(id){return document.getElementById(id)}
-function show(s){document.querySelectorAll('.screen').forEach(e=>e.classList.remove('active'));$(s).classList.add('active')}
+/* ── GLOBALS ── */
+let currentDifficulty = 'medium';
+let currentMode=null, score=0, round=0, maxRounds=10;
+let gameData={}, canInteract=false, deferredPrompt=null;
+let gameTimer=null, studyCountTimer=null;
 
-function startGame(mode){
-score=0;combo=0;
-difficulty=$("difficulty").value;
-$("mode").textContent=mode.toUpperCase();
-$("status").textContent="Dificultad: "+difficulty;
-show('game');
-updateHUD();
+const GAME_COLORS=['#ef4444','#3b82f6','#22c55e','#f59e0b','#a855f7','#ec4899','#06b6d4','#f97316'];
+const EMOJIS=['🐉','🦋','🌺','⚡','🎯','🔮','🌙','⭐','🎸','🍀','🦁','🐙','🌈','🎭','🏔️','🦅','🔥','💎','🌊','🎪','🦄','🍄','🌴','🦊','🐬'];
+const SHAPE_TYPES=['circle','square','triangle','diamond','star','hexagon'];
+const ROT_SHAPES=['arrow','l-shape','t-shape','z-shape','hook'];
+const MODE_INFO = {
+  pairs: {t: 'Memoria Visual', i:'🃏'}, shapes: {t: 'Reconocimiento', i:'🔷'},
+  simon: {t: 'Retención Progresiva', i:'🎮'}, pattern: {t: 'Habilidad Espacial', i:'🧩'},
+  spot: {t: 'Atención al Detalle', i:'👁️'}, rotation: {t: 'Orientación Mental', i:'🌀'}
+};
+
+/* ── UTILS ── */
+const $=id=>document.getElementById(id);
+const rnd=n=>Math.floor(Math.random()*n);
+const shuffle=a=>[...a].sort(()=>Math.random()-.5);
+function getBest(m,d){return parseInt(localStorage.getItem(`neurox_${m}_${d}`)||'0');}
+function setBest(m,d,v){if(v>getBest(m,d)){localStorage.setItem(`neurox_${m}_${d}`,v);return true;}return false;}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  $(id).classList.add('active');
+  window.scrollTo(0,0);
+  $('hud').style.display = (id==='game' || id==='home') ? 'flex' : 'none';
 }
 
-function simulatePlay(){
-let base={easy:50,medium:100,hard:160}[difficulty];
-combo++;
-let pts=Math.floor((base+Math.random()*50)*(1+combo*0.2));
-score+=pts;
-addXP(pts);
-updateHUD();
-}
-
-function fail(){combo=0;updateHUD();}
-
-function addXP(x){
-player.xp+=x;
-let need=player.level*100;
-while(player.xp>=need){player.xp-=need;player.level++;need=player.level*100;}
-localStorage.setItem('xp',player.xp);
-localStorage.setItem('lvl',player.level);
+function setGlobalDifficulty(diff){
+  currentDifficulty = diff;
+  const cfg = DIFF_CONFIG[diff];
+  const pill = $('hud-diff');
+  pill.textContent = cfg.label;
+  pill.style.background = cfg.color;
+  updateBests();
+  showScreen('home');
 }
 
 function updateHUD(){
-$('score').textContent=score;
-$('level').textContent=player.level;
-$('combo').textContent=combo;
+  $('hud-score').textContent=score.toLocaleString();
+  $('pill-round').textContent=`R ${round}/${maxRounds}`;
 }
 
-function goHome(){show('home')}
+function setMsg(html){ $('msg-box').innerHTML=html; }
+function updateProg(r,total){ $('g-prog').style.width=`${(r/total)*100}%`; }
 
-updateHUD();
+function spawnParticles(x,y){
+  const ic=['✨','⭐','✅','🌟'];
+  for(let i=0; i<6; i++){
+    const p=document.createElement('div'); p.className='pt'; p.textContent=ic[rnd(ic.length)];
+    p.style.left=x+'px'; p.style.top=y+'px';
+    p.style.setProperty('--tx',`${(Math.random()-.5)*120}px`);
+    p.style.setProperty('--ty',`${-(Math.random()*80+20)}px`);
+    document.body.appendChild(p); setTimeout(()=>p.remove(),800);
+  }
+}
+
+function clearAllTimers(){ clearInterval(gameTimer); clearInterval(studyCountTimer); gameTimer=null; studyCountTimer=null; }
+
+function goHome(){ clearAllTimers(); $('countdown-overlay').classList.add('hidden'); $('study-overlay').classList.add('hidden'); updateBests(); showScreen('home'); }
+
+function updateBests(){
+  Object.keys(MODE_INFO).forEach(m=>{
+    const b=getBest(m, currentDifficulty);
+    $('best-'+m).textContent=b>0?b.toLocaleString():'—';
+  });
+}
+
+/* ── FLUJO DE JUEGO ── */
+function launchMode(mode){
+  currentMode=mode; score=0; round=0; gameData={};
+  updateHUD();
+  $('game-mode-title').textContent = MODE_INFO[mode].t;
+  $('game-mode-icon').textContent = MODE_INFO[mode].i;
+  showScreen('game');
+  startCountdown(()=>startRound());
+}
+
+function startCountdown(cb){
+  const ov=$('countdown-overlay'), nm=$('countdown-num');
+  ov.classList.remove('hidden'); let n=3; nm.textContent=n;
+  const t=setInterval(()=>{
+    n--;
+    if(n<=0){ clearInterval(t); ov.classList.add('hidden'); cb(); }
+    else { nm.textContent=n; }
+  }, 800);
+}
+
+function showStudy(html,duration,cb){
+  clearAllTimers();
+  const ov=$('study-overlay');
+  $('study-content').innerHTML=html;
+  let secs=Math.ceil(duration/1000); $('study-timer').textContent=secs;
+  ov.classList.remove('hidden');
+  studyCountTimer=setInterval(()=>{
+    secs--; $('study-timer').textContent=secs;
+    if(secs<=0){ clearInterval(studyCountTimer); ov.classList.add('hidden'); cb(); }
+  }, 1000);
+}
+
+function startRound(){
+  round++;
+  updateHUD();
+  updateProg(round-1, maxRounds);
+  canInteract = false;
+  $('pill-time').textContent = '⏱ --s';
+  const arena = $('game-arena');
+  arena.innerHTML = ''; // Limpiar arena
+  arena.style.opacity = 0; // Prepara animacion de entrada
+  setTimeout(()=>arena.style.opacity = 1, 50);
+
+  // Derivar al juego específico
+  if(currentMode==='pairs') roundPairs();
+  else if(currentMode==='shapes') roundShapes();
+  else if(currentMode==='simon') roundSimon();
+  else if(currentMode==='pattern') roundPattern();
+  else if(currentMode==='spot') roundSpot();
+  else if(currentMode==='rotation') roundRotation();
+}
+
+function onRoundComplete(basePts){
+  if(basePts > 0){
+    const diffMod = DIFF_CONFIG[currentDifficulty].ptsMod;
+    const finalPts = Math.round(basePts * diffMod);
+    score += finalPts;
+    updateHUD();
+    spawnParticles(window.innerWidth/2, window.innerHeight*.3);
+  } else {
+    // Feedback visual de error en la caja de mensajes
+    const mb = $('msg-box');
+    mb.style.borderColor = 'var(--rose)';
+    mb.style.boxShadow = '0 0 15px rgba(244,63,94,0.4)';
+    setTimeout(()=>{mb.style.borderColor=mb.style.boxShadow='';}, 600);
+  }
+
+  if(round>=maxRounds) setTimeout(showResult, 600);
+  else setTimeout(startRound, 800);
+}
+
+function showResult(){
+  clearAllTimers();
+  const isNew = setBest(currentMode, currentDifficulty, score);
+  const cfg = DIFF_CONFIG[currentDifficulty];
+  
+  $('res-icon').textContent = score > (1000 * cfg.ptsMod) ? '🏆' : (score > (500 * cfg.ptsMod) ? '🥈' : '🥉');
+  $('res-title').textContent = score > (800 * cfg.ptsMod) ? '¡Eres Élite!' : '¡Buen Trabajo!';
+  $('res-subtitle').textContent = `Completado en modo ${cfg.label}`;
+  $('res-score').textContent = score.toLocaleString();
+  $('res-rec').style.display = isNew ? 'inline-block' : 'none';
+  $('res-replay').onclick = ()=>launchMode(currentMode);
+  showScreen('result');
+}
+
+/* ════════════════════ MODOS DE JUEGO ════════════════════ */
+
+/* ── 1. PAIRS (DIFICULTAD AÑADIDA) ── */
+function roundPairs(){
+  const cfg = DIFF_CONFIG[currentDifficulty].pairs;
+  const cols = round >= cfg.roundsTo5 ? 5 : cfg.baseGrid;
+  const rows = cols === 5 ? 4 : 4; // 5x4 o 4x4
+  const totalCards = cols * rows;
+  const pairsCount = totalCards / 2;
+  
+  const timeLimit = Math.max(15, Math.round((40 + pairsCount*2 - round*1.5) * DIFF_CONFIG[currentDifficulty].timeLimitMod));
+  
+  const pool = shuffle(EMOJIS).slice(0, pairsCount);
+  const deck = shuffle([...pool, ...pool]);
+  let flipped=[], matched=0, canFlip=true;
+
+  setMsg(`Encuentra los <strong>${pairsCount} pares</strong>. Tienes <strong>${timeLimit}s</strong>`);
+  
+  const grid=document.createElement('div'); grid.className='pairs-grid';
+  grid.style.gridTemplateColumns=`repeat(${cols}, 1fr)`;
+  
+  deck.forEach((emoji,i)=>{
+    const c=document.createElement('div'); c.className='pcard'; c.dataset.e=emoji;
+    c.innerHTML=`<div class="pcard-inner"><div class="pcard-f pcard-back"></div><div class="pcard-f pcard-front">${emoji}</div></div>`;
+    c.addEventListener('click',()=>{
+      if(!canFlip || !canInteract || c.classList.contains('flip') || c.classList.contains('done')) return;
+      c.classList.add('flip'); flipped.push(c);
+      if(flipped.length===2){
+        canFlip=false; const[a,b]=flipped;
+        if(a.dataset.e===b.dataset.e){
+          a.classList.add('done'); b.classList.add('done'); matched++; flipped=[]; canFlip=true;
+          if(matched===pairsCount){ clearInterval(gameTimer); onRoundComplete(100 + timeLeft*2); }
+        } else {
+          a.classList.add('bad'); b.classList.add('bad');
+          setTimeout(()=>{ a.classList.remove('flip','bad'); b.classList.remove('flip','bad'); flipped=[]; canFlip=true; }, 700);
+        }
+      }
+    }); grid.appendChild(c);
+  });
+  $('game-arena').appendChild(grid);
+  
+  let timeLeft = timeLimit; $('pill-time').textContent = '⏱ '+timeLeft+'s';
+  canInteract = true;
+  gameTimer=setInterval(()=>{
+    timeLeft--; $('pill-time').textContent = '⏱ '+timeLeft+'s';
+    if(timeLeft<=0){ clearInterval(gameTimer); canInteract=false; setMsg('¡Tiempo agotado!'); onRoundComplete(matched * 10); }
+  },1000);
+}
+
+/* ── SVGs para Shapes y Rotation (Mejorados) ── */
+function wrapSVG(inner, s=100){ return `<svg viewBox="0 0 ${s} ${s}" xmlns="http://www.w3.org/2000/svg">${inner}</svg>`; }
+function makeSVGShape(type, color){
+  const c = color; let i='';
+  if(type==='circle') i=`<circle cx="50" cy="50" r="40" fill="${c}"/>`;
+  else if(type==='square') i=`<rect x="10" y="10" width="80" height="80" rx="8" fill="${c}"/>`;
+  else if(type==='triangle') i=`<polygon points="50,10 90,85 10,85" fill="${c}"/>`;
+  else if(type==='diamond') i=`<polygon points="50,10 85,50 50,90 15,50" fill="${c}"/>`;
+  else if(type==='star') i=`<polygon points="50,10 61,40 93,40 67,60 77,90 50,70 23,90 33,60 7,40 39,40" fill="${c}"/>`;
+  else i=`<polygon points="50,5 90,25 90,75 50,95 10,75 10,25" fill="${c}"/>`;
+  return wrapSVG(i);
+}
+
+/* ── 2. SHAPES (DIFICULTAD AÑADIDA) ── */
+function roundShapes(){
+  const cfg = DIFF_CONFIG[currentDifficulty].shapes;
+  const count = Math.min(6, cfg.baseCount + Math.floor(round/3));
+  const studyTime = Math.max(1500, (4000 - round*100) * cfg.timeMod);
+  
+  const colors=shuffle(GAME_COLORS).slice(0, Math.min(count+1, GAME_COLORS.length));
+  const targets=[];
+  for(let i=0; i<count; i++){ targets.push({type:SHAPE_TYPES[rnd(SHAPE_TYPES.length)], color:colors[rnd(colors.length)]}); }
+  
+  const studyHTML=`<div class="shapes-study" style="grid-template-columns:repeat(${Math.min(count,3)},1fr)">${targets.map(t=>`<div class="shape-card">${makeSVGShape(t.type, t.color)}</div>`).join('')}</div>`;
+  setMsg(`Memoriza estas <strong>${count} figuras</strong>`);
+  showStudy(studyHTML, studyTime, ()=>askShape(targets, 0, 0));
+}
+
+function askShape(targets, idx, ptsAccum){
+  const total = targets.length;
+  if(idx >= total){ onRoundComplete(ptsAccum); return; }
+  
+  const target = targets[idx];
+  setMsg(`¿Cuál era la figura <strong>#${idx+1}</strong>?`);
+  
+  const options = shuffle([target, ...shuffle(createDistractors(target)).slice(0, 5)]);
+  
+  const grid=document.createElement('div'); grid.className='shapes-study';
+  grid.style.gridTemplateColumns = `repeat(3, 1fr)`;
+  
+  options.forEach(opt=>{
+    const card=document.createElement('div'); card.className='shape-card clickable';
+    card.innerHTML=makeSVGShape(opt.type, opt.color);
+    card.addEventListener('click', ()=>{
+      if(!canInteract) return; canInteract=false;
+      if(opt.type===target.type && opt.color===target.color){
+        card.classList.add('correct');
+        spawnParticles(window.innerWidth/2, window.innerHeight*.3);
+        setTimeout(()=>askShape(targets, idx+1, ptsAccum + 30), 500);
+      } else {
+        card.classList.add('wrong');
+        // Mostrar correcta
+        grid.querySelectorAll('.shape-card').forEach((c,i)=>{
+          if(options[i].type===target.type && options[i].color===target.color) c.classList.add('correct');
+        });
+        setTimeout(()=>onRoundComplete(ptsAccum), 800);
+      }
+    }); grid.appendChild(card);
+  });
+  const arena = $('game-arena'); arena.innerHTML=''; arena.appendChild(grid);
+  $('pill-time').textContent = `${idx+1}/${total}`;
+  setTimeout(()=>canInteract=true, 200);
+}
+function createDistractors(t){
+  const ds=[];
+  SHAPE_TYPES.forEach(type=>GAME_COLORS.forEach(color=>{ if(type!==t.type || color!==t.color) ds.push({type,color}); }));
+  return ds;
+}
+
+/* ── 3. SIMON (DIFICULTAD AÑADIDA) ── */
+function roundSimon(){
+  const cfg = DIFF_CONFIG[currentDifficulty].simon;
+  if(round===1) gameData.simonSeq=[];
+  
+  // Añadir 1 o 2 pasos según dificultad
+  gameData.simonSeq.push(rnd(4));
+  if(currentDifficulty==='hard' && round > 5 && rnd(10)>5) gameData.simonSeq.push(rnd(4));
+
+  const seq = gameData.simonSeq;
+  const baseDelay = 600 - (round*15);
+  const flashDur = Math.max(150, baseDelay * 0.7 / cfg.speedMod);
+  const interval = Math.max(200, baseDelay / cfg.speedMod);
+
+  setMsg(`Observa la secuencia de <strong>${seq.length} pasos</strong>`);
+  $('pill-time').textContent = `🎮 ${seq.length}`;
+  
+  arena=$('game-arena');
+  arena.innerHTML=`<div class="simon-grid">${['🔴','🔵','🟢','🟡'].map((ic,i)=>`<button class="simon-btn sb${i+1}" id="sb${i}"><div class="simon-icon">${ic}</div></button>`).join('')}</div>`;
+  
+  let step=0;
+  canInteract=false;
+  setTimeout(playStep, 600);
+
+  function playStep(){
+    if(step >= seq.length){ canInteract=true; gameData.simonStep=0; setMsg('¡Tu turno! Repite la secuencia.'); return; }
+    const btn=$('sb'+seq[step]);
+    btn.classList.add('flash');
+    setTimeout(()=>{ btn.classList.remove('flash'); step++; setTimeout(playStep, interval - flashDur); }, flashDur);
+  }
+
+  // Adjuntar eventos a botones
+  arena.querySelectorAll('.simon-btn').forEach((btn, i)=>{
+    btn.addEventListener('click', ()=>simonPress(i));
+  });
+}
+
+function simonPress(idx){
+  if(!canInteract) return;
+  const btn=$('sb'+idx); btn.classList.add('active-press'); setTimeout(()=>btn.classList.remove('active-press'), 150);
+  
+  if(idx===gameData.simonSeq[gameData.simonStep]){
+    gameData.simonStep++;
+    if(gameData.simonStep >= gameData.simonSeq.length){
+      canInteract=false;
+      onRoundComplete(50 + gameData.simonSeq.length * 5);
+    }
+  } else {
+    canInteract=false;
+    setMsg('<strong style="color:var(--rose)">¡Error!</strong> Reiniciando secuencia...');
+    gameData.simonSeq = []; // Resetear
+    setTimeout(startRound, 1000);
+  }
+}
+
+/* ── 4. PATTERN (DIFICULTAD AÑADIDA) ── */
+function roundPattern(){
+  const cfg = DIFF_CONFIG[currentDifficulty].pattern;
+  const size = round >= cfg.roundsTo5 ? 5 : (round >= cfg.roundsTo4 ? 4 : cfg.baseGrid);
+  const colorCount = Math.min(GAME_COLORS.length, 2 + Math.floor(round/3) + (currentDifficulty==='hard'?1:0));
+  
+  const studyTime = Math.max(2000, (5000 - round*150) * DIFF_CONFIG[currentDifficulty].timeLimitMod);
+  const colors = shuffle(GAME_COLORS).slice(0, colorCount);
+  const pattern = Array.from({length: size*size}, ()=>colors[rnd(colors.length)]);
+  
+  const gridHTML=(p, cls)=>`<div class="pattern-grid ${cls}" style="grid-template-columns:repeat(${size},1fr); max-width:${size*60}px;">${p.map(c=>`<div class="pattern-cell ${c?'lit':''}" style="background:${c||''}"></div>`).join('')}</div>`;
+  
+  setMsg(`Memoriza el patrón de <strong>${size}x${size}</strong>`);
+  showStudy(gridHTML(pattern), studyTime, ()=>{
+    setMsg('Recrea el patrón. Haz clic en las celdas para cambiar color.');
+    const arena = $('game-arena'); arena.innerHTML='';
+    
+    const userPattern = Array(size*size).fill(null);
+    const grid = document.createElement('div'); grid.className='pattern-grid';
+    grid.style.cssText = `grid-template-columns:repeat(${size},1fr); max-width:${size*60}px;`;
+    
+    pattern.forEach((targetColor, i)=>{
+      const cell = document.createElement('div'); cell.className='pattern-cell clickable';
+      cell.addEventListener('click', ()=>{
+        if(!canInteract) return;
+        // Rotar colores al hacer clic
+        let cIdx = userPattern[i] ? colors.indexOf(userPattern[i]) : -1;
+        cIdx = (cIdx + 1) % colors.length;
+        const newColor = colors[cIdx];
+        userPattern[i] = newColor; cell.style.background = newColor; cell.classList.add('lit');
+      });
+      grid.appendChild(cell);
+    });
+    arena.appendChild(grid);
+    
+    const btn = document.createElement('button'); btn.className='btn-p'; btn.style.marginTop='20px'; btn.textContent='VERIFICAR';
+    btn.onclick = ()=>{
+      if(!canInteract) return; canInteract=false;
+      clearInterval(gameTimer);
+      let correct = 0;
+      grid.querySelectorAll('.pattern-cell').forEach((cell, i)=>{
+        if(userPattern[i]===pattern[i]){ correct++; cell.classList.add('cf'); }
+        else { cell.classList.add('wf'); cell.style.background=pattern[i]; cell.classList.add('lit');} // Mostrar correcta
+      });
+      const total = size*size;
+      const pts = Math.round((correct/total)*150);
+      setMsg(`Completado: <strong>${correct}/${total}</strong> celdas.`);
+      onRoundComplete(pts);
+    };
+    arena.appendChild(btn);
+
+    // Tiempo límite para input
+    const inputTime = Math.round((10 + size*3) * DIFF_CONFIG[currentDifficulty].timeLimitMod);
+    let timeLeft = inputTime; $('pill-time').textContent = `⏱ ${timeLeft}s`;
+    canInteract = true;
+    gameTimer = setInterval(()=>{
+      timeLeft--; $('pill-time').textContent = `⏱ ${timeLeft}s`;
+      if(timeLeft<=0){ btn.click(); }
+    }, 1000);
+  });
+}
+
+/* ── 5. SPOT (DIFICULTAD AÑADIDA) ── */
+function roundSpot(){
+  const cfg = DIFF_CONFIG[currentDifficulty].spot;
+  const size = round >= 6 ? cfg.baseGrid + 1 : cfg.baseGrid;
+  const changes = Math.min(cfg.maxChanges, 1 + Math.floor(round/4));
+  
+  const studyTime = Math.max(2000, (4000 - round*100) * DIFF_CONFIG[currentDifficulty].timeLimitMod);
+  const emojis = shuffle(EMOJIS).slice(0, size*size);
+  const modified = [...emojis];
+  const changedIdxs = shuffle([...Array(size*size).keys()]).slice(0, changes);
+  
+  changedIdxs.forEach(idx=>{
+    let org = emojis[idx], nv;
+    do{ nv = EMOJIS[rnd(EMOJIS.length)]; } while(nv===org);
+    modified[idx] = nv;
+  });
+  
+  const gridHTML=(arr)=>`<div class="spot-grid" style="grid-template-columns:repeat(${size},1fr); max-width:${size*60}px;">${arr.map(e=>`<div class="spot-cell">${e}</div>`).join('')}</div>`;
+  
+  setMsg(`Observa la grilla original de <strong>${size}x${size}</strong>`);
+  showStudy(gridHTML(emojis), studyTime, ()=>{
+    setMsg(`Encuentra los <strong>${changes} cambio(s)</strong> en la nueva grilla.`);
+    $('pill-time').textContent = `👁️ 0/${changes}`;
+    const arena=$('game-arena'); arena.innerHTML='';
+    const grid=document.createElement('div'); grid.className='spot-grid';
+    grid.style.cssText=`grid-template-columns:repeat(${size},1fr); max-width:${size*60}px;`;
+    
+    let found=0, errors=0;
+    modified.forEach((emoji, i)=>{
+      const cell=document.createElement('div'); cell.className='spot-cell clickable'; cell.textContent=emoji;
+      cell.addEventListener('click', ()=>{
+        if(!canInteract || cell.classList.contains('found') || cell.classList.contains('wrong-pick')) return;
+        if(changedIdxs.includes(i)){
+          cell.classList.add('found'); found++;
+          $('pill-time').textContent = `👁️ ${found}/${changes}`;
+          if(found>=changes){ canInteract=false; onRoundComplete(100 - errors*15); }
+        } else {
+          cell.classList.add('wrong-pick'); errors++;
+          if(errors >= 3 + cfg.maxChanges){ // Demasiados errores
+            canInteract=false;
+            setMsg('¡Demasiados fallos!');
+            grid.querySelectorAll('.spot-cell').forEach((c,ti)=>{ if(changedIdxs.includes(ti)) c.classList.add('found'); });
+            setTimeout(()=>onRoundComplete(0), 1000);
+          }
+        }
+      }); grid.appendChild(cell);
+    });
+    arena.appendChild(grid);
+    canInteract=true;
+  });
+}
+
+/* ── 6. ROTATION (DIFICULTAD AÑADIDA) ── */
+function roundRotation(){
+  const cfg = DIFF_CONFIG[currentDifficulty].rotation;
+  const type = ROT_SHAPES[rnd(ROT_SHAPES.length)];
+  const color = GAME_COLORS[rnd(GAME_COLORS.length)];
+  const correctAngle = cfg.angles[rnd(cfg.angles.length)];
+  
+  const studyTime = Math.max(1000, (3000 - round*100) * DIFF_CONFIG[currentDifficulty].timeLimitMod);
+  
+  // Reusar wrapSVG pero con rotación
+  const makeRotShape=(angle, size=100)=>{
+    const h=size/2;
+    // Figuras simples en SVG
+    let shapeSvg='';
+    if(type==='arrow') shapeSvg=`<polygon points="50,5 95,50 70,50 70,95 30,95 30,50 5,50" fill="${color}"/>`;
+    else if(type==='l-shape') shapeSvg=`<polygon points="20,5 20,95 80,95 80,65 50,65 50,5" fill="${color}"/>`;
+    else if(type==='t-shape') shapeSvg=`<polygon points="5,5 95,5 95,35 65,35 65,95 35,95 35,35 5,35" fill="${color}"/>`;
+    else if(type==='hook') shapeSvg=`<path d="M20,5 V95 H80 V50 H50 V65 H65 V80 H35 V5 Z" fill="${color}"/>`;
+    else shapeSvg=`<polygon points="10,30 50,30 50,10 90,50 50,90 50,70 10,70" fill="${color}"/>`; // default arrow
+
+    return `<svg viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg"><g transform="rotate(${angle} 50 50)">${shapeSvg}</g></svg>`;
+  }
+
+  const studyHTML=`<div class="shape-card" style="width:150px; height:150px;">${makeRotShape(correctAngle)}</div>`;
+  setMsg('Memoriza la <strong>orientación</strong> exacta.');
+  showStudy(studyHTML, studyTime, ()=>{
+    setMsg('¿Cuál es la orientación correcta?');
+    const arena=$('game-arena'); arena.innerHTML='';
+    const grid=document.createElement('div'); grid.className='rotation-choices';
+    
+    // Crear opciones (correcta + 3 incorrectas)
+    const distractors = shuffle(cfg.angles.filter(a=>a!==correctAngle)).slice(0,3);
+    const options = shuffle([correctAngle, ...distractors]);
+    
+    options.forEach(angle=>{
+      const card=document.createElement('div'); card.className='rot-choice clickable';
+      card.innerHTML=makeRotShape(angle);
+      card.addEventListener('click', ()=>{
+        if(!canInteract) return; canInteract=false;
+        if(angle===correctAngle){
+          card.classList.add('correct');
+          onRoundComplete(90);
+        } else {
+          card.classList.add('wrong');
+          grid.querySelectorAll('.rot-choice').forEach((c,i)=>{ if(options[i]===correctAngle) c.classList.add('correct'); });
+          onRoundComplete(0);
+        }
+      }); grid.appendChild(card);
+    });
+    arena.appendChild(grid);
+    canInteract=true;
+  });
+}
+
+/* ── PWA & INITIALIZATION ── */
+window.addEventListener('beforeinstallprompt', e=>{
+  e.preventDefault(); deferredPrompt=e;
+  if(!localStorage.getItem('neurox_dismissed')) setTimeout(()=>$('install-banner').classList.add('show'), 3000);
+});
+
+$('ib-install-btn').addEventListener('click', async()=>{
+  if(!deferredPrompt) return; deferredPrompt.prompt();
+  const{outcome}=await deferredPrompt.userChoice;
+  if(outcome==='accepted') dismissInstall(); deferredPrompt=null;
+});
+
+function dismissInstall(){ localStorage.setItem('neurox_dismissed','1'); $('install-banner').classList.remove('show'); }
+
+if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+
+// Iniciar app mostrando bienvenida
+showScreen('welcome');
 </script>
-
 </body>
 </html>
 
