@@ -4,234 +4,431 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <meta name="theme-color" content="#0f172a"/>
-<title>Neurox — Elite V2</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;800&family=Orbitron:wght@400;900&display=swap" rel="stylesheet"/>
+<title>Neurox — Complete Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet"/>
 <style>
 :root {
-  --bg: #0f172a; --panel: #1e293b; --accent: #6366f1; --cyan: #22d3ee;
-  --text: #f8fafc; --muted: #94a3b8; --border: #334155; --success: #22c55e;
+  --bg: #0f172a; --panel: #1e293b; --accent: #3b82f6; --cyan: #22d3ee;
+  --text: #f8fafc; --muted: #94a3b8; --border: #334155; 
+  --success: #22c55e; --danger: #ef4444; --light: #ffffff; --dark: #0f172a;
 }
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 body { font-family:'Outfit', sans-serif; background:var(--bg); color:var(--text); overflow:hidden; }
 
-#app { max-width:500px; margin:0 auto; min-height:100vh; display:flex; flex-direction:column; position:relative; border-left:1px solid var(--border); border-right:1px solid var(--border); }
+#app { max-width:500px; margin:0 auto; height:100vh; display:flex; flex-direction:column; position:relative; background:var(--bg); border-inline:1px solid var(--border); }
 
-/* HEADER MEJORADO */
-header { padding:15px 20px; display:flex; justify-content:space-between; align-items:center; background:rgba(15,23,42,0.9); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); z-index:100; }
-.logo-box { display:flex; flex-direction:column; }
-.logo { font-family:'Orbitron', sans-serif; font-weight:900; color:var(--cyan); letter-spacing:1px; font-size:1.2rem; }
-.xp-track { width:80px; height:4px; background:var(--panel); border-radius:2px; margin-top:4px; overflow:hidden; }
-#xp-fill { height:100%; background:var(--cyan); width:0%; transition:0.4s; }
+/* HEADER */
+header { padding:15px 20px; display:flex; justify-content:space-between; align-items:center; background:var(--panel); border-bottom:1px solid var(--border); z-index:100; }
+.logo { font-family:'Orbitron', sans-serif; font-weight:900; color:var(--cyan); font-size:1.2rem; letter-spacing:1px;}
+.btn-exit { background:transparent; border:1px solid var(--muted); color:var(--text); padding:6px 12px; border-radius:8px; font-size:0.8rem; font-weight:700; cursor:pointer; }
+.btn-exit:hover { background:var(--border); }
 
 /* PANTALLAS */
-.screen { display:none; padding:20px; flex-direction:column; gap:20px; height:calc(100vh - 70px); overflow-y:auto; }
+.screen { display:none; padding:20px; flex-direction:column; flex-grow:1; overflow-y:auto; }
 .screen.active { display:flex; animation:fadeIn 0.2s ease; }
 @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 
-/* TARJETAS DE SELECCIÓN (ALTA VISIBILIDAD) */
-.grid-menu { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
-.card-mode { background:var(--panel); border:2px solid var(--border); padding:20px; border-radius:18px; text-align:center; transition:0.2s; cursor:pointer; }
-.card-mode:active { transform:scale(0.96); border-color:var(--accent); background:var(--bg); }
-.card-icon { font-size:2.2rem; margin-bottom:10px; display:block; }
-.card-title { font-weight:800; font-size:0.85rem; letter-spacing:1px; color:var(--text); text-transform:uppercase; }
+/* MENÚ */
+.menu-grid { display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:20px; }
+.card-mode { background:var(--panel); border:2px solid var(--border); padding:20px 10px; border-radius:16px; text-align:center; cursor:pointer; transition:0.2s; }
+.card-mode:active { transform:scale(0.95); border-color:var(--accent); }
+.card-icon { font-size:2.5rem; display:block; margin-bottom:10px; }
+.card-title { font-weight:900; font-size:0.9rem; letter-spacing:1px; text-transform:uppercase; }
 
-/* BOTÓN DE SALIDA */
-.btn-exit { background:var(--panel); border:1px solid var(--border); color:var(--muted); padding:8px 12px; border-radius:10px; font-size:0.7rem; font-weight:800; cursor:pointer; }
-
-/* INTERFAZ DE JUEGO (CONTRASTE MEJORADO) */
+/* ARENA DE JUEGO (ALTO CONTRASTE) */
 #arena { flex-grow:1; display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; }
-.math-display { font-size:3.5rem; font-weight:800; color:var(--text); margin-bottom:40px; text-shadow:0 0 20px rgba(34,211,238,0.2); }
-.answer-grid { display:grid; grid-template-columns: 1fr 1fr; gap:15px; width:100%; }
-.btn-ans { background:#f8fafc; color:#0f172a; border:none; padding:20px; border-radius:16px; font-size:1.5rem; font-weight:800; cursor:pointer; box-shadow:0 4px 0 #cbd5e1; }
-.btn-ans:active { transform:translateY(2px); box-shadow:none; }
+.question-box { font-size:3rem; font-weight:900; color:var(--light); margin-bottom:30px; text-align:center; letter-spacing:2px; }
+.ans-grid { display:grid; grid-template-columns: 1fr 1fr; gap:15px; width:100%; max-width:400px; }
 
-/* ENFOQUE GRID */
-.focus-grid { display:grid; grid-template-columns: repeat(5, 1fr); gap:8px; width:100%; }
-.focus-cell { background:var(--panel); border:1px solid var(--border); aspect-ratio:1; display:flex; align-items:center; justify-content:center; font-size:1.2rem; font-weight:800; border-radius:8px; color:var(--muted); }
+/* BOTONES DE RESPUESTA CLAROS */
+.btn-ans { background:var(--light); color:var(--dark); border:none; padding:20px; border-radius:12px; font-size:1.8rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 #cbd5e1; transition:0.1s; }
+.btn-ans:active { transform:translateY(4px); box-shadow:none; }
+
+/* CUADRÍCULAS ESPECÍFICAS */
+.focus-grid { display:grid; grid-template-columns: repeat(5, 1fr); gap:8px; width:100%; max-width:400px; }
+.focus-cell { background:var(--light); color:var(--dark); aspect-ratio:1; display:flex; align-items:center; justify-content:center; font-size:1.5rem; font-weight:900; border-radius:8px; cursor:pointer; box-shadow:0 3px 0 #cbd5e1; }
+.focus-cell:active { transform:translateY(3px); box-shadow:none; }
+
+.pairs-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:10px; width:100%; max-width:400px; }
+.pair-card { background:var(--panel); border:2px solid var(--border); aspect-ratio:1; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:2rem; cursor:pointer; transition:0.2s; }
+.pair-card.revealed { background:var(--light); border-color:var(--light); }
+.pair-card.matched { visibility:hidden; }
+
+.simon-grid { display:grid; grid-template-columns: 1fr 1fr; gap:15px; width:100%; max-width:300px; margin:0 auto; }
+.simon-btn { aspect-ratio:1; border-radius:20px; border:none; opacity:0.5; transition:0.1s; cursor:pointer; box-shadow:0 5px 0 rgba(0,0,0,0.3); }
+.simon-btn.active { opacity:1; transform:scale(0.95); box-shadow:none; filter:brightness(1.5); }
+#simon-0 { background:#ef4444; } #simon-1 { background:#3b82f6; } #simon-2 { background:#22c55e; } #simon-3 { background:#f59e0b; }
 
 /* OVERLAYS */
-.overlay { position:fixed; inset:0; background:var(--bg); z-index:200; display:none; padding:30px; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
+.overlay { position:fixed; inset:0; background:rgba(15,23,42,0.95); z-index:200; display:none; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px; }
 .overlay.active { display:flex; }
-.btn-start { background:var(--accent); color:white; border:none; padding:18px 40px; border-radius:15px; font-family:'Orbitron'; font-weight:900; width:100%; font-size:1rem; margin-top:20px; }
+.btn-primary { background:var(--accent); color:var(--light); border:none; padding:18px 0; border-radius:12px; font-family:'Orbitron', sans-serif; font-weight:900; width:100%; max-width:300px; font-size:1.1rem; margin-top:30px; cursor:pointer; }
+.hud-text { font-family:'Orbitron', sans-serif; font-size:0.8rem; color:var(--cyan); margin-bottom:10px; width:100%; text-align:center; letter-spacing:1px; }
+
+/* INDICADOR DE REFLEJOS */
+#speed-target { width:100px; height:100px; background:var(--danger); border-radius:50%; display:none; position:absolute; cursor:pointer; box-shadow:0 0 20px rgba(239,68,68,0.5); }
 </style>
 </head>
 <body>
 
 <div id="app">
   <header>
-    <div class="logo-box">
-      <span class="logo">NEUROX</span>
-      <div class="xp-track"><div id="xp-fill"></div></div>
-    </div>
-    <div id="game-controls" style="display:none">
-        <button class="btn-exit" onclick="confirmExit()">✕ SALIR</button>
-    </div>
-    <div id="menu-stats" style="text-align:right">
-      <div id="user-lvl" style="font-family:'Orbitron'; font-size:0.8rem; color:var(--cyan)">LVL 1</div>
-    </div>
+    <div class="logo">NEUROX</div>
+    <div id="user-stats" style="font-family:'Orbitron'; font-size:0.8rem; color:var(--muted)">LVL 1</div>
+    <button id="btn-exit" class="btn-exit" style="display:none" onclick="goHome()">✕ SALIR</button>
   </header>
 
   <section id="menu" class="screen active">
-    <div style="margin-bottom:10px">
-        <h2 style="font-size:1.5rem">Entrenamiento</h2>
-        <p style="color:var(--muted); font-size:0.85rem">Selecciona un área para comenzar.</p>
+    <div>
+      <h2 style="font-size:1.8rem; color:var(--light)">Módulos</h2>
+      <p style="color:var(--muted); font-size:0.9rem">Entrenamiento cognitivo integral.</p>
     </div>
-    <div class="grid-menu">
-      <div class="card-mode" onclick="preLaunch('math')"><span class="card-icon">➕</span><span class="card-title">Cálculo</span></div>
-      <div class="card-mode" onclick="preLaunch('focus')"><span class="card-icon">👁️</span><span class="card-title">Enfoque</span></div>
-      <div class="card-mode" onclick="preLaunch('logic')"><span class="card-icon">🧩</span><span class="card-title">Lógica</span></div>
-      <div class="card-mode" onclick="preLaunch('speed')"><span class="card-icon">⚡</span><span class="card-title">Reflejos</span></div>
+    <div class="menu-grid">
+      <div class="card-mode" onclick="launch('math')"><span class="card-icon">➕</span><span class="card-title">Cálculo</span></div>
+      <div class="card-mode" onclick="launch('focus')"><span class="card-icon">👁️</span><span class="card-title">Enfoque</span></div>
+      <div class="card-mode" onclick="launch('logic')"><span class="card-icon">🧩</span><span class="card-title">Lógica</span></div>
+      <div class="card-mode" onclick="launch('speed')"><span class="card-icon">⚡</span><span class="card-title">Reflejos</span></div>
+      <div class="card-mode" onclick="launch('pairs')"><span class="card-icon">🃏</span><span class="card-title">Memoria</span></div>
+      <div class="card-mode" onclick="launch('simon')"><span class="card-icon">🎮</span><span class="card-title">Secuencia</span></div>
     </div>
   </section>
 
   <section id="game" class="screen">
+    <div id="game-hud" class="hud-text">RONDA 1/10</div>
     <div id="arena"></div>
+    <div id="speed-target"></div>
   </section>
 
-  <div id="overlay-instr" class="overlay">
-    <div id="ins-icon" style="font-size:4rem; margin-bottom:20px">🧩</div>
-    <h2 id="ins-title" style="font-family:'Orbitron'; margin-bottom:15px; color:var(--cyan)">TÍTULO</h2>
-    <p id="ins-body" style="line-height:1.6; color:var(--muted); max-width:300px"></p>
-    <button class="btn-start" onclick="startGame()">INICIAR RANGO</button>
+  <div id="overlay-intro" class="overlay">
+    <div id="intro-icon" style="font-size:5rem; margin-bottom:10px"></div>
+    <h2 id="intro-title" style="font-family:'Orbitron'; color:var(--cyan); font-size:1.8rem; margin-bottom:15px"></h2>
+    <p id="intro-desc" style="color:var(--muted); font-size:1rem; max-width:320px; line-height:1.5"></p>
+    <button class="btn-primary" onclick="startGame()">COMENZAR</button>
   </div>
 
-  <div id="overlay-res" class="overlay">
-    <h1 style="font-family:'Orbitron'; color:var(--success)">RESULTADOS</h1>
-    <div id="res-xp-gain" style="font-size:3.5rem; font-weight:900; margin:20px 0">+0 XP</div>
-    <button class="btn-start" onclick="goHome()">VOLVER AL MENÚ</button>
+  <div id="overlay-results" class="overlay">
+    <h1 style="font-family:'Orbitron'; color:var(--success); font-size:2.5rem">¡COMPLETADO!</h1>
+    <div style="color:var(--muted); margin-top:10px; font-size:1.2rem">PUNTUACIÓN</div>
+    <div id="res-score" style="font-size:4rem; font-weight:900; color:var(--light); margin-bottom:20px">0</div>
+    <button class="btn-primary" onclick="goHome()">VOLVER AL MENÚ</button>
   </div>
 </div>
 
 <script>
-/* ── AUDIO ── */
+/* ── AUDIO SINTÉTICO (SIN ARCHIVOS EXTERNOS) ── */
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-function playSfx(f, t="sine", d=0.1) {
-    const o = audioCtx.createOscillator();
-    const g = audioCtx.createGain();
-    o.type = t; o.frequency.setValueAtTime(f, audioCtx.currentTime);
-    g.gain.setValueAtTime(0.1, audioCtx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + d);
-    o.connect(g); g.connect(audioCtx.destination);
-    o.start(); o.stop(audioCtx.currentTime + d);
+function playTone(freq, type="sine", duration=0.1) {
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(); osc.stop(audioCtx.currentTime + duration);
 }
-
-/* ── ESTADO Y PERFIL ── */
-let profile = JSON.parse(localStorage.getItem('neurox_v2_p')) || { xp: 0, lvl: 1 };
-let currentGame = { mode: '', round: 1, score: 0 };
-
-function updateUI() {
-    document.getElementById('user-lvl').innerText = `LVL ${profile.lvl}`;
-    document.getElementById('xp-fill').style.width = `${(profile.xp % 1000) / 10}%`;
-    localStorage.setItem('neurox_v2_p', JSON.stringify(profile));
-}
-
-function showScreen(id) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    document.getElementById('game-controls').style.display = (id === 'game') ? 'block' : 'none';
-    document.getElementById('menu-stats').style.display = (id === 'menu') ? 'block' : 'none';
-}
-
-const DESCS = {
-    math: { i:'➕', t:'Cálculo Veloz', b:'Resuelve la operación. Los botones son ahora de alto contraste para mejorar la visibilidad.' },
-    focus: { i:'👁️', t:'Enfoque Dinámico', b:'Encuentra el carácter intruso. El objetivo y el fondo cambian en cada ronda.' },
-    logic: { i:'🧩', t:'Patrón Lógico', b:'Encuentra el número que falta en la secuencia lógica mostrada.' },
-    speed: { i:'⚡', t:'Reflejos', b:'Toca los objetivos lo más rápido posible.' }
+const sfx = {
+    click: () => playTone(500, "triangle", 0.05),
+    good: () => playTone(800, "sine", 0.1),
+    bad: () => playTone(200, "sawtooth", 0.2),
+    win: () => { playTone(400); setTimeout(()=>playTone(600), 100); setTimeout(()=>playTone(800), 200); }
 };
 
-function preLaunch(mode) {
-    playSfx(440);
-    currentGame = { mode, round: 1, score: 0 };
-    const d = DESCS[mode];
-    document.getElementById('ins-icon').innerText = d.i;
-    document.getElementById('ins-title').innerText = d.t;
-    document.getElementById('ins-body').innerText = d.b;
-    document.getElementById('overlay-instr').classList.add('active');
-}
+/* ── ESTADO GLOBAL ── */
+let profile = JSON.parse(localStorage.getItem('neurox_profile')) || { lvl: 1, xp: 0 };
+let game = { mode: '', round: 1, maxRounds: 10, score: 0, active: false };
+let timerData = { start: 0, timeout: null };
+let customGameData = {}; // Para estados específicos de Simon o Pares
 
-function startGame() {
-    document.getElementById('overlay-instr').classList.remove('active');
-    showScreen('game');
-    loadRound();
-}
+document.getElementById('user-stats').innerText = `LVL ${profile.lvl}`;
 
-function loadRound() {
-    if(currentGame.round > 10) { finishGame(); return; }
-    const arena = document.getElementById('arena');
-    arena.innerHTML = '';
+const MODES = {
+    math: { i:'➕', t:'Cálculo', d:'Resuelve la operación. Selecciona la respuesta correcta en los paneles blancos.' },
+    focus: { i:'👁️', t:'Enfoque', d:'Encuentra la letra intrusa dentro de la cuadrícula.' },
+    logic: { i:'🧩', t:'Lógica', d:'Descubre el número que sigue en la secuencia matemática.' },
+    speed: { i:'⚡', t:'Reflejos', d:'Toca el círculo rojo lo más rápido posible en cuanto aparezca.' },
+    pairs: { i:'🃏', t:'Memoria', d:'Encuentra las parejas de símbolos. Tienes intentos limitados para equivocarte.' },
+    simon: { i:'🎮', t:'Secuencia', d:'Memoriza el orden de las luces y repítelo.' }
+};
 
-    if(currentGame.mode === 'math') {
-        const a = Math.floor(Math.random() * (10 * profile.lvl)) + 2;
-        const b = Math.floor(Math.random() * (10 * profile.lvl)) + 2;
-        const res = a + b;
-        const opts = [res, res + 2, res - 1, res + 10].sort(() => Math.random() - 0.5);
-        
-        arena.innerHTML = `
-            <div class="math-display">${a} + ${b}</div>
-            <div class="answer-grid">
-                ${opts.map(n => `<button class="btn-ans" onclick="check(${n}, ${res})">${n}</button>`).join('')}
-            </div>
-        `;
-    } 
-    else if(currentGame.mode === 'focus') {
-        const sets = [["O","0"], ["M","N"], ["E","F"], ["I","1"], ["S","5"], ["X","K"]];
-        const currentSet = sets[Math.floor(Math.random()*sets.length)];
-        const target = currentSet[1];
-        const bg = currentSet[0];
-        const targetIdx = Math.floor(Math.random() * 25);
-        
-        arena.innerHTML = `<div style="margin-bottom:20px; color:var(--cyan)">Busca la "${target}"</div>`;
-        const grid = document.createElement('div');
-        grid.className = 'focus-grid';
-        for(let i=0; i<25; i++) {
-            const char = (i === targetIdx) ? target : bg;
-            const cell = document.createElement('div');
-            cell.className = 'focus-cell';
-            cell.innerText = char;
-            cell.onclick = () => check(char, target);
-            grid.appendChild(cell);
-        }
-        arena.appendChild(grid);
-    }
-    else {
-        arena.innerHTML = `<div class="card-mode">Modo en construcción</div>`;
-        setTimeout(finishGame, 1000);
-    }
-}
-
-function check(val, target) {
-    if(val === target) {
-        playSfx(880);
-        currentGame.score += 100;
-    } else {
-        playSfx(220, "sawtooth");
-    }
-    currentGame.round++;
-    loadRound();
-}
-
-function confirmExit() {
-    if(confirm("¿Seguro que quieres salir? Perderás el progreso de esta ronda.")) {
-        goHome();
-    }
+/* ── NAVEGACIÓN ── */
+function show(id) {
+    document.querySelectorAll('.screen, .overlay').forEach(el => el.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.getElementById('btn-exit').style.display = (id === 'game') ? 'block' : 'none';
+    document.getElementById('user-stats').style.display = (id === 'menu') ? 'block' : 'none';
 }
 
 function goHome() {
-    document.getElementById('overlay-res').classList.remove('active');
-    showScreen('menu');
+    sfx.click();
+    game.active = false;
+    clearTimeout(timerData.timeout);
+    document.getElementById('speed-target').style.display = 'none';
+    show('menu');
 }
 
-function finishGame() {
-    const gain = Math.floor(currentGame.score * (profile.lvl * 0.5));
-    profile.xp += gain;
+/* ── INICIO DE JUEGOS ── */
+function launch(mode) {
+    sfx.click();
+    game = { mode: mode, round: 1, maxRounds: (mode === 'pairs' || mode === 'simon') ? 1 : 10, score: 0, active: true };
+    customGameData = {};
+    
+    document.getElementById('intro-icon').innerText = MODES[mode].i;
+    document.getElementById('intro-title').innerText = MODES[mode].t;
+    document.getElementById('intro-desc').innerText = MODES[mode].d;
+    show('overlay-intro');
+}
+
+function startGame() {
+    sfx.click();
+    show('game');
+    nextRound();
+}
+
+function nextRound() {
+    if(!game.active) return;
+    if(game.round > game.maxRounds) { endGame(); return; }
+    
+    document.getElementById('game-hud').innerText = (game.mode === 'pairs' || game.mode === 'simon') 
+        ? `MODO: ${MODES[game.mode].t.toUpperCase()}` 
+        : `RONDA ${game.round}/${game.maxRounds}`;
+        
+    const arena = document.getElementById('arena');
+    arena.innerHTML = '';
+    document.getElementById('speed-target').style.display = 'none';
+
+    if(game.mode === 'math') renderMath(arena);
+    else if(game.mode === 'focus') renderFocus(arena);
+    else if(game.mode === 'logic') renderLogic(arena);
+    else if(game.mode === 'speed') renderSpeed();
+    else if(game.mode === 'pairs') renderPairs(arena);
+    else if(game.mode === 'simon') renderSimon(arena);
+}
+
+function handleAnswer(isCorrect) {
+    if(!game.active) return;
+    if(isCorrect) {
+        sfx.good();
+        game.score += 100;
+    } else {
+        sfx.bad();
+    }
+    game.round++;
+    setTimeout(nextRound, 300);
+}
+
+/* ── 1. CÁLCULO ── */
+function renderMath(arena) {
+    const a = Math.floor(Math.random() * 15) + 5;
+    const b = Math.floor(Math.random() * 15) + 5;
+    const isAdd = Math.random() > 0.5;
+    const res = isAdd ? a + b : a - b;
+    
+    let opts = [res, res+2, res-1, res+10].sort(() => Math.random() - 0.5);
+    
+    arena.innerHTML = `
+        <div class="question-box">${a} ${isAdd ? '+' : '-'} ${b} = ?</div>
+        <div class="ans-grid">
+            ${opts.map(n => `<button class="btn-ans" onclick="handleAnswer(${n === res})">${n}</button>`).join('')}
+        </div>
+    `;
+}
+
+/* ── 2. ENFOQUE ── */
+function renderFocus(arena) {
+    const pairs = [["O","0"], ["M","N"], ["8","B"], ["E","F"]];
+    const pair = pairs[Math.floor(Math.random() * pairs.length)];
+    const bg = pair[0], target = pair[1];
+    const targetIdx = Math.floor(Math.random() * 25);
+    
+    arena.innerHTML = `<div style="color:var(--cyan); margin-bottom:15px; font-weight:700">Encuentra la "${target}"</div>`;
+    const grid = document.createElement('div');
+    grid.className = 'focus-grid';
+    
+    for(let i=0; i<25; i++) {
+        const isTarget = i === targetIdx;
+        grid.innerHTML += `<div class="focus-cell" onclick="handleAnswer(${isTarget})">${isTarget ? target : bg}</div>`;
+    }
+    arena.appendChild(grid);
+}
+
+/* ── 3. LÓGICA (SECUENCIAS) ── */
+function renderLogic(arena) {
+    const step = Math.floor(Math.random() * 5) + 2;
+    const start = Math.floor(Math.random() * 10) + 1;
+    const seq = [start, start+step, start+(step*2), start+(step*3)];
+    const ans = start+(step*4);
+    
+    let opts = [ans, ans+step, ans-1, ans+2].sort(() => Math.random() - 0.5);
+    
+    arena.innerHTML = `
+        <div class="question-box" style="font-size:2.5rem">${seq.join(', ')}, ?</div>
+        <div class="ans-grid">
+            ${opts.map(n => `<button class="btn-ans" onclick="handleAnswer(${n === ans})">${n}</button>`).join('')}
+        </div>
+    `;
+}
+
+/* ── 4. REFLEJOS ── */
+function renderSpeed() {
+    const target = document.getElementById('speed-target');
+    const delay = Math.random() * 1500 + 500;
+    
+    document.getElementById('arena').innerHTML = `<div style="color:var(--muted)">Espera al círculo rojo...</div>`;
+    
+    timerData.timeout = setTimeout(() => {
+        if(!game.active) return;
+        document.getElementById('arena').innerHTML = '';
+        const size = 80;
+        const maxX = window.innerWidth - size - 40;
+        const maxY = window.innerHeight - 200;
+        
+        target.style.left = `${Math.random() * maxX + 20}px`;
+        target.style.top = `${Math.random() * maxY + 100}px`;
+        target.style.width = `${size}px`; target.style.height = `${size}px`;
+        target.style.display = 'block';
+        
+        timerData.start = Date.now();
+        
+        target.onclick = () => {
+            target.style.display = 'none';
+            const ms = Date.now() - timerData.start;
+            sfx.good();
+            game.score += Math.max(10, 500 - ms); // Más rápido = más puntos
+            game.round++;
+            setTimeout(nextRound, 500);
+        };
+    }, delay);
+}
+
+/* ── 5. MEMORIA (PARES) ── */
+function renderPairs(arena) {
+    const symbols = ['💎','🔥','🚀','🍀','⚡','🍎','👾','🧩'];
+    let deck = [...symbols, ...symbols].sort(() => Math.random() - 0.5);
+    customGameData = { flipped: [], matches: 0, lock: false };
+    
+    const grid = document.createElement('div');
+    grid.className = 'pairs-grid';
+    
+    deck.forEach((sym, i) => {
+        const card = document.createElement('div');
+        card.className = 'pair-card';
+        card.dataset.sym = sym;
+        card.onclick = () => {
+            if(customGameData.lock || card.classList.contains('revealed') || card.classList.contains('matched')) return;
+            sfx.click();
+            card.classList.add('revealed');
+            card.innerText = sym;
+            customGameData.flipped.push(card);
+            
+            if(customGameData.flipped.length === 2) {
+                customGameData.lock = true;
+                const [c1, c2] = customGameData.flipped;
+                if(c1.dataset.sym === c2.dataset.sym) {
+                    sfx.good();
+                    setTimeout(() => {
+                        c1.classList.add('matched'); c2.classList.add('matched');
+                        customGameData.matches++;
+                        game.score += 100;
+                        customGameData.flipped = []; customGameData.lock = false;
+                        if(customGameData.matches === 8) { game.round++; nextRound(); } // Fin
+                    }, 500);
+                } else {
+                    sfx.bad();
+                    setTimeout(() => {
+                        c1.classList.remove('revealed'); c1.innerText = '';
+                        c2.classList.remove('revealed'); c2.innerText = '';
+                        customGameData.flipped = []; customGameData.lock = false;
+                    }, 800);
+                }
+            }
+        };
+        grid.appendChild(card);
+    });
+    arena.appendChild(grid);
+}
+
+/* ── 6. SECUENCIA (SIMON) ── */
+function renderSimon(arena) {
+    customGameData = { seq: [], step: 0, level: 1 };
+    
+    arena.innerHTML = `
+        <div id="simon-status" style="color:var(--light); font-weight:700; margin-bottom:20px; text-align:center">NIVEL 1: Observa...</div>
+        <div class="simon-grid">
+            <button class="simon-btn" id="simon-0"></button>
+            <button class="simon-btn" id="simon-1"></button>
+            <button class="simon-btn" id="simon-2"></button>
+            <button class="simon-btn" id="simon-3"></button>
+        </div>
+    `;
+    
+    document.querySelectorAll('.simon-btn').forEach((btn, i) => {
+        btn.onclick = () => {
+            if(customGameData.lock) return;
+            flashBtn(i);
+            if(i === customGameData.seq[customGameData.step]) {
+                customGameData.step++;
+                if(customGameData.step === customGameData.seq.length) {
+                    sfx.good();
+                    game.score += 100;
+                    customGameData.level++;
+                    if(customGameData.level > 5) { // Gana a los 5 niveles
+                        setTimeout(() => { game.round++; nextRound(); }, 1000);
+                    } else {
+                        setTimeout(playSimonSeq, 1000);
+                    }
+                }
+            } else {
+                sfx.bad();
+                document.getElementById('simon-status').innerText = "¡ERROR! Fin del juego.";
+                document.getElementById('simon-status').style.color = "var(--danger)";
+                setTimeout(() => { game.round++; nextRound(); }, 1500);
+            }
+        };
+    });
+    
+    setTimeout(playSimonSeq, 800);
+}
+
+function flashBtn(id) {
+    sfx.click();
+    const btn = document.getElementById(`simon-${id}`);
+    btn.classList.add('active');
+    setTimeout(() => btn.classList.remove('active'), 250);
+}
+
+function playSimonSeq() {
+    customGameData.lock = true;
+    customGameData.step = 0;
+    customGameData.seq.push(Math.floor(Math.random() * 4));
+    document.getElementById('simon-status').innerText = `NIVEL ${customGameData.level}: Observa...`;
+    document.getElementById('simon-status').style.color = "var(--light)";
+    
+    let i = 0;
+    const interval = setInterval(() => {
+        flashBtn(customGameData.seq[i]);
+        i++;
+        if(i >= customGameData.seq.length) {
+            clearInterval(interval);
+            customGameData.lock = false;
+            document.getElementById('simon-status').innerText = "¡TU TURNO!";
+            document.getElementById('simon-status').style.color = "var(--cyan)";
+        }
+    }, 600);
+}
+
+/* ── FIN DEL JUEGO ── */
+function endGame() {
+    sfx.win();
+    game.active = false;
+    profile.xp += game.score;
     profile.lvl = Math.floor(profile.xp / 1000) + 1;
-    updateUI();
-    document.getElementById('res-xp-gain').innerText = `+${gain} XP`;
-    document.getElementById('overlay-res').classList.add('active');
+    localStorage.setItem('neurox_profile', JSON.stringify(profile));
+    
+    document.getElementById('user-stats').innerText = `LVL ${profile.lvl}`;
+    document.getElementById('res-score').innerText = game.score;
+    show('overlay-results');
 }
-
-updateUI();
 </script>
 </body>
 </html>
-
