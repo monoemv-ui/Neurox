@@ -4,16 +4,16 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <meta name="theme-color" content="#0f172a"/>
-<title>Neurox — Edición Corregida</title>
+<title>Neurox — Edición Definitiva</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet"/>
 <style>
 :root {
   --bg: #0f172a; --panel: #1e293b; --accent: #3b82f6; --cyan: #22d3ee;
   --text: #f8fafc; --muted: #94a3b8; --border: #334155; 
-  --success: #22c55e; --light: #ffffff; --dark: #0f172a;
+  --success: #22c55e; --danger: #ef4444; --light: #ffffff; --dark: #0f172a;
 }
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-body { font-family:'Outfit', sans-serif; background:var(--bg); color:var(--text); overflow:hidden; }
+body { font-family:'Outfit', sans-serif; background:var(--bg); color:var(--text); overflow:hidden; touch-action: manipulation; }
 
 #app { max-width:500px; margin:0 auto; height:100vh; display:flex; flex-direction:column; position:relative; background:var(--bg); border-inline:1px solid var(--border); }
 
@@ -27,37 +27,40 @@ header { padding:15px 20px; display:flex; justify-content:space-between; align-i
 .screen.active { display:flex; animation:fadeIn 0.2s ease; }
 @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 
-/* MENÚ */
+/* MENÚ Y NIVELES */
 .menu-grid { display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:20px; }
 .card-mode { background:var(--panel); border:2px solid var(--border); padding:20px 10px; border-radius:16px; text-align:center; cursor:pointer; }
 .card-mode:active { transform:scale(0.95); }
 .card-icon { font-size:2.5rem; display:block; margin-bottom:10px; }
 .card-title { font-weight:900; font-size:0.9rem; text-transform:uppercase; }
 
-/* NIVELES */
 .level-grid { display:grid; grid-template-columns: repeat(5, 1fr); gap:8px; margin-top:20px; }
 .lvl-btn { aspect-ratio:1; border-radius:8px; border:1px solid var(--border); background:var(--panel); color:var(--muted); display:flex; align-items:center; justify-content:center; font-weight:700; cursor:pointer; }
 .lvl-btn.unlocked { border-color:var(--cyan); color:var(--text); }
 .lvl-btn.current { background:var(--cyan); color:var(--bg); }
 
-/* ARENA DE JUEGO (ALTO CONTRASTE) */
+/* ARENA DE JUEGO */
 #arena { flex-grow:1; display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; position:relative; }
+.ans-grid { display:grid; grid-template-columns: 1fr 1fr; gap:12px; width:100%; max-width:400px; }
 .btn-ans { background:var(--light); color:var(--dark); border:none; padding:20px; border-radius:12px; font-size:1.8rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 #cbd5e1; width:100%; }
+.btn-ans:active { transform:translateY(4px); box-shadow:none; }
 
-/* CUADRÍCULA ENFOQUE (REPARADA) */
+/* ENFOQUE (INTACTO) */
 .focus-grid { display:grid; width:100%; max-width:400px; gap:8px; aspect-ratio:1; }
 .focus-cell { background:var(--light); color:var(--dark); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; font-weight:900; cursor:pointer; box-shadow:0 3px 0 #cbd5e1; }
+.focus-cell:active { transform:translateY(3px); box-shadow:none; }
 
-/* OTROS JUEGOS */
+/* MEMORIA (PARES) */
 .pairs-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:10px; width:100%; }
-.pair-card { background:var(--panel); border:2px solid var(--border); aspect-ratio:1; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:2rem; cursor:pointer; }
-.pair-card.revealed { background:var(--light); }
+.pair-card { background:var(--panel); border:2px solid var(--border); aspect-ratio:1; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:2rem; cursor:pointer; transition:0.2s; }
+.pair-card.revealed { background:var(--light); border-color:var(--light); }
 
-.simon-grid { display:grid; grid-template-columns: 1fr 1fr; gap:15px; width:100%; max-width:300px; }
-.simon-btn { aspect-ratio:1; border-radius:20px; opacity:0.5; transition:0.1s; cursor:pointer; border:none; }
-.simon-btn.active { opacity:1; filter:brightness(1.5); transform:scale(0.95); }
+/* SECUENCIA (SIMON) */
+.simon-btn { aspect-ratio:1; border-radius:20px; opacity:0.5; transition:0.1s; cursor:pointer; border:none; box-shadow:0 6px 0 rgba(0,0,0,0.3); }
+.simon-btn:active { transform:translateY(4px); box-shadow:none; }
 
-#target { position:absolute; border-radius:50%; background:#ef4444; display:none; cursor:pointer; z-index:10; }
+/* REFLEJOS */
+#target { position:absolute; border-radius:50%; background:var(--danger); display:none; cursor:pointer; z-index:10; }
 
 .overlay { position:fixed; inset:0; background:rgba(15,23,42,0.98); z-index:200; display:none; flex-direction:column; align-items:center; justify-content:center; padding:30px; text-align:center; }
 .overlay.active { display:flex; }
@@ -96,12 +99,31 @@ header { padding:15px 20px; display:flex; justify-content:space-between; align-i
   <div id="overlay-res" class="overlay">
     <h2 id="res-status" style="font-family:'Orbitron'; font-size:2rem">RESULTADOS</h2>
     <p id="res-msg" style="margin:20px 0; color:var(--muted)"></p>
-    <button style="background:var(--accent); color:white; border:none; padding:15px 40px; border-radius:10px; font-weight:900;" onclick="showHome()">CONTINUAR</button>
+    <button style="background:var(--accent); color:white; border:none; padding:15px 40px; border-radius:10px; font-weight:900; font-size:1.1rem; width:100%; max-width:300px;" onclick="showHome()">CONTINUAR</button>
   </div>
 </div>
 
 <script>
-/* ── LÓGICA Y ESTADO ── */
+/* ── AUDIO FIX (Garantiza que funcione) ── */
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playTone(freq, type="sine", duration=0.1) {
+    if(audioCtx.state === 'suspended') audioCtx.resume(); // Desbloquea el audio en el primer clic
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(); osc.stop(audioCtx.currentTime + duration);
+}
+const sfx = {
+    click: () => playTone(500, "triangle", 0.05),
+    good: () => playTone(800, "sine", 0.1),
+    bad: () => playTone(200, "sawtooth", 0.2),
+    win: () => { playTone(400); setTimeout(()=>playTone(600),100); setTimeout(()=>playTone(800),200); }
+};
+
+/* ── ESTADO Y PERFIL ── */
 let profile = JSON.parse(localStorage.getItem('neurox_final')) || { xp: 0, unlocks: { math:1, focus:1, logic:1, speed:1, pairs:1, simon:1 } };
 let currentMode = '', currentLevel = 1, game = { round: 1, score: 0, active: false };
 
@@ -111,6 +133,7 @@ function save() {
 }
 
 function showHome() {
+    sfx.click();
     game.active = false;
     document.querySelectorAll('.screen, .overlay').forEach(s => s.classList.remove('active'));
     document.getElementById('menu').classList.add('active');
@@ -119,6 +142,8 @@ function showHome() {
 }
 
 function openLevels(mode) {
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+    sfx.click();
     currentMode = mode;
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById('levels').classList.add('active');
@@ -131,7 +156,7 @@ function openLevels(mode) {
         const isUnlocked = i <= profile.unlocks[mode];
         btn.className = `lvl-btn ${i < profile.unlocks[mode] ? 'unlocked' : (i === profile.unlocks[mode] ? 'current' : 'locked')}`;
         btn.innerText = i;
-        if(isUnlocked) btn.onclick = () => startLevel(i);
+        if(isUnlocked) btn.onclick = () => { sfx.click(); startLevel(i); };
         container.appendChild(btn);
     }
 }
@@ -144,25 +169,34 @@ function startLevel(lvl) {
     loadRound();
 }
 
+function checkAns(correct) {
+    if(!game.active) return;
+    if(correct) { sfx.good(); game.score++; } else { sfx.bad(); }
+    game.round++;
+    setTimeout(loadRound, 300);
+}
+
+/* ── CARGA DE JUEGOS REPARADOS ── */
 function loadRound() {
     if(game.round > 10) { finishGame(); return; }
     document.getElementById('game-hud').innerText = `${currentMode.toUpperCase()} L${currentLevel} • RONDA ${game.round}/10`;
     const arena = document.getElementById('arena');
     arena.innerHTML = '';
 
+    /* 1. CÁLCULO */
     if(currentMode === 'math') {
         const a = Math.floor(Math.random() * (currentLevel * 5)) + 2;
         const b = Math.floor(Math.random() * (currentLevel * 5)) + 2;
         const res = a + b;
-        arena.innerHTML = `<div style="font-size:3.5rem; font-weight:900; margin-bottom:30px">${a}+${b}</div>`;
-        const grid = document.createElement('div'); grid.className = 'menu-grid'; // Reusando grid para opciones
-        [res, res+2, res-5, a+b+10].sort(()=>Math.random()-.5).forEach(n => {
+        arena.innerHTML = `<div style="font-size:3.5rem; font-weight:900; margin-bottom:30px">${a} + ${b}</div>`;
+        const grid = document.createElement('div'); grid.className = 'ans-grid';
+        [res, res+2, res-1, a+b+5].sort(()=>Math.random()-.5).forEach(n => {
             grid.innerHTML += `<button class="btn-ans" onclick="checkAns(${n===res})">${n}</button>`;
         });
         arena.appendChild(grid);
     } 
+    /* 2. ENFOQUE (INTACTO) */
     else if(currentMode === 'focus') {
-        // AQUÍ ESTÁ TU CÓDIGO DE ENFOQUE REPARADO
         const size = currentLevel < 10 ? 4 : (currentLevel < 20 ? 5 : 6);
         const set = [["O","0"],["M","N"],["8","B"],["S","5"]][Math.floor(Math.random()*4)];
         const targetIdx = Math.floor(Math.random() * (size*size));
@@ -178,34 +212,57 @@ function loadRound() {
         }
         arena.appendChild(grid);
     }
+    /* 3. LÓGICA (REPARADO) */
+    else if(currentMode === 'logic') {
+        const step = Math.floor(Math.random() * 5) + Math.floor(currentLevel/3) + 1;
+        const start = Math.floor(Math.random() * 20) + currentLevel;
+        const seq = [start, start + step, start + (step*2), start + (step*3)];
+        const res = start + (step*4);
+        
+        arena.innerHTML = `<div style="font-size:2.5rem; font-weight:900; margin-bottom:30px; letter-spacing:2px;">${seq.join(', ')}, ?</div>`;
+        const grid = document.createElement('div'); grid.className = 'ans-grid';
+        
+        [res, res+step, res-1, res+2].sort(()=>Math.random()-.5).forEach(o => {
+            grid.innerHTML += `<button class="btn-ans" onclick="checkAns(${o === res})">${o}</button>`;
+        });
+        arena.appendChild(grid);
+    }
+    /* 4. REFLEJOS */
     else if(currentMode === 'speed') {
-        arena.innerHTML = `<div id="target"></div><div style="color:var(--muted)">¡Toca el círculo!</div>`;
+        arena.innerHTML = `<div id="target"></div><div style="color:var(--muted)">¡Toca el círculo rojo!</div>`;
         const target = document.getElementById('target');
-        const size = Math.max(30, 80 - (currentLevel * 1.5));
+        const size = Math.max(40, 90 - (currentLevel * 1.5));
         const speed = Math.max(400, 1500 - (currentLevel * 35));
+        
         target.style.width = target.style.height = size + 'px';
         target.style.left = Math.random()*(arena.offsetWidth-size)+'px';
         target.style.top = Math.random()*(arena.offsetHeight-size)+'px';
         target.style.display = 'block';
+        
         const t = setTimeout(() => checkAns(false), speed);
         target.onclick = (e) => { e.stopPropagation(); clearTimeout(t); checkAns(true); };
     }
+    /* 5. MEMORIA */
     else if(currentMode === 'pairs') {
         const syms = ['💎','🔥','🚀','🍀','⚡','🍎','👾','🧩'].slice(0, 4 + Math.floor(currentLevel/10));
         let deck = [...syms, ...syms].sort(()=>Math.random()-.5);
         let flipped = [];
         const grid = document.createElement('div'); grid.className = 'pairs-grid';
+        
         deck.forEach(s => {
             const card = document.createElement('div'); card.className = 'pair-card';
             card.onclick = () => {
                 if(flipped.length < 2 && !card.innerText) {
+                    sfx.click();
                     card.innerText = s; card.classList.add('revealed'); flipped.push(card);
                     if(flipped.length === 2) {
                         if(flipped[0].innerText === flipped[1].innerText) {
-                            game.score += 10; flipped = [];
-                            if(document.querySelectorAll('.revealed').length === deck.length) checkAns(true);
+                            sfx.good();
+                            flipped = [];
+                            if(document.querySelectorAll('.revealed').length === deck.length) setTimeout(() => checkAns(true), 400);
                         } else {
-                            setTimeout(() => { flipped.forEach(c=>{c.innerText=''; c.classList.remove('revealed')}); flipped=[]; }, 500);
+                            sfx.bad();
+                            setTimeout(() => { flipped.forEach(c=>{c.innerText=''; c.classList.remove('revealed')}); flipped=[]; }, 600);
                         }
                     }
                 }
@@ -214,25 +271,72 @@ function loadRound() {
         });
         arena.appendChild(grid);
     }
-    else {
-        arena.innerHTML = `<button class="btn-ans" onclick="checkAns(true)">SIGUIENTE</button>`;
+    /* 6. SECUENCIA (SIMON - REPARADO) */
+    else if(currentMode === 'simon') {
+        const seqLen = 2 + Math.floor(currentLevel/5) + Math.floor(game.round/3);
+        game.simonSeq = [];
+        for(let i=0; i<seqLen; i++) game.simonSeq.push(Math.floor(Math.random() * 4));
+        game.simonStep = 0; game.simonLocked = true;
+        
+        arena.innerHTML = `
+            <div id="simon-status" style="color:var(--cyan); font-weight:900; margin-bottom:20px;">OBSERVA...</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; width:100%; max-width:280px;">
+                <button class="simon-btn" id="simon-0" style="background:#ef4444"></button>
+                <button class="simon-btn" id="simon-1" style="background:#3b82f6"></button>
+                <button class="simon-btn" id="simon-2" style="background:#22c55e"></button>
+                <button class="simon-btn" id="simon-3" style="background:#f59e0b"></button>
+            </div>
+        `;
+        
+        const flashSimon = (id) => {
+            sfx.click();
+            const b = document.getElementById(`simon-${id}`);
+            b.style.opacity = '1'; b.style.transform = 'scale(0.9)'; b.style.filter = 'brightness(1.5)';
+            setTimeout(() => { b.style.opacity = '0.5'; b.style.transform = 'none'; b.style.filter = 'none'; }, 250);
+        };
+        
+        for(let i=0; i<4; i++) {
+            document.getElementById(`simon-${i}`).onclick = () => {
+                if(game.simonLocked) return;
+                flashSimon(i);
+                if(i === game.simonSeq[game.simonStep]) {
+                    game.simonStep++;
+                    if(game.simonStep === game.simonSeq.length) {
+                        game.simonLocked = true;
+                        setTimeout(() => checkAns(true), 400);
+                    }
+                } else {
+                    game.simonLocked = true;
+                    document.getElementById('simon-status').innerText = "¡ERROR!";
+                    document.getElementById('simon-status').style.color = "var(--danger)";
+                    setTimeout(() => checkAns(false), 600);
+                }
+            };
+        }
+        
+        let step = 0;
+        const interval = setInterval(() => {
+            flashSimon(game.simonSeq[step]); step++;
+            if(step >= game.simonSeq.length) {
+                clearInterval(interval);
+                game.simonLocked = false;
+                document.getElementById('simon-status').innerText = "¡TU TURNO!";
+                document.getElementById('simon-status').style.color = "var(--light)";
+            }
+        }, 600 - Math.min(300, currentLevel * 10));
     }
 }
 
-function checkAns(correct) {
-    if(!game.active) return;
-    if(correct) game.score++;
-    game.round++;
-    setTimeout(loadRound, 200);
-}
-
 function finishGame() {
+    sfx.win();
     game.active = false;
     const passed = game.score >= 8;
     if(passed && currentLevel === profile.unlocks[currentMode] && currentLevel < 30) profile.unlocks[currentMode]++;
     profile.xp += game.score * 10;
+    
     document.getElementById('res-status').innerText = passed ? "¡SUPERADO!" : "FALLIDO";
-    document.getElementById('res-msg').innerText = passed ? "Nivel completado con éxito." : "Necesitas 8 aciertos para avanzar.";
+    document.getElementById('res-status').style.color = passed ? "var(--success)" : "var(--danger)";
+    document.getElementById('res-msg').innerText = passed ? `Desbloqueaste el siguiente nivel. (Aciertos: ${game.score}/10)` : `Necesitas 8 aciertos para avanzar. (Aciertos: ${game.score}/10)`;
     document.getElementById('overlay-res').classList.add('active');
     save();
 }
